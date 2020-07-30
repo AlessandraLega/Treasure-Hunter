@@ -1,20 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
-import Welcome from "./Welcome";
-
+import Welcome from "./welcome";
+import Home from "./home";
 /*add logic to determine what to pass to ReactDOM.render
 if the url is /welcome, render your Welcome component
 if the url is not /welcome, render your small logo*/
 
 let isLoggedIn = location.pathname != "/welcome";
 
+let elem;
+
 if (isLoggedIn) {
-    ReactDOM.render(<Home />, document.querySelector("main"));
+    elem = <Home />;
 } else {
-    ReactDOM.render(<Welcome />, document.querySelector("main"));
+    elem = <Welcome />;
 }
 
+ReactDOM.render(elem, document.querySelector("main"));
 /* ReactDOM.render(
     <HelloWorld />,
     document.querySelector('main')

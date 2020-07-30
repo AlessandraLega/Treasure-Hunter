@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const compression = require("compression");
 const cookieSession = require("cookie-session");
+const bc = require("./bc.js");
+const db = require("./db.js");
 
 app.use(compression());
 
@@ -31,6 +33,48 @@ app.get("/welcome", (req, res) => {
     } else {
         res.sendFile(__dirname + "/index.html");
     }
+});
+
+app.post("/register", (req, res) => {
+    bc.hash(req.body.password)
+        .then((hashedPw) => {
+            db.addUser(req.body.first, req.body.last, req.body.email, hashedPw)
+                .then((results) => {
+                    req.session.id = results.rows[0].id;
+                    res.json({ success: true });
+                })
+                .catch((err) => {
+                    console.log("error in db.addUser: ", err);
+                    res.json({ success: false });
+                });
+        })
+        .catch((err) => {
+            console.log("error in bc.hash: ", err);
+            res.json({ success: false });
+        });
+});
+
+app.post("/login", (req, res) => {
+    db.getHashedPw(req.body.email)
+        .then((results) => {
+            bc.compare(req.body.password, results.rows[0].password)
+                .then((boolean) => {
+                    if (boolean) {
+                        req.session.id = results.rows[0].id;
+                        res.json({ success: true });
+                    } else {
+                        res.json({ success: false });
+                    }
+                })
+                .catch((err) => {
+                    console.log("error in bc.compare: ", err);
+                    res.json({ success: false });
+                });
+        })
+        .catch((err) => {
+            console.log("error in db.getHashedPassword: ", err);
+            res.json({ success: false });
+        });
 });
 
 app.get("*", function (req, res) {

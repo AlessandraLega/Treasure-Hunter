@@ -1,28 +1,116 @@
 import React from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default class ResetPassword extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            step: 1,
+        };
+    }
+    handleSendEmail() {
+        axios
+            .post("/step1", {
+                email: this.state.email,
+            })
+            .then(({ data }) => {
+                if (data.success) {
+                    this.setState({ step: 2 });
+                } else {
+                    this.setState({ error: true });
+                }
+            });
+    }
+    handleChange(e) {
+        this.setState({
+            [e.target.name]: e.target.value,
+        });
+    }
+    changePassword() {
+        axios
+            .post("/step2", {
+                code: this.state.code,
+                newPassword: this.state.newPassword,
+            })
+            .then(({ data }) => {
+                if (data.success) {
+                    this.setState({
+                        step: 3,
+                    });
+                } else {
+                    this.setState({
+                        error: true,
+                    });
+                }
+            });
     }
     render() {
         return (
             <div>
-                <h3>Reset your password</h3>
-                <p>E-mail:</p>
-                <p>
-                    Please enter your e-mail below. Please don't close this
-                    window, we'll send you an email soon!
-                </p>
-                <input
-                    type="text"
-                    name="email"
-                    id="email"
-                    onChange={(e) => this.handleChange(e)}
-                    placeholder="e-mail"
-                ></input>
-                <button>Submit</button>
+                {this.state.step == 1 && (
+                    <div>
+                        <h3>Reset your password</h3>
+                        <p>
+                            Please enter your e-mail below. Please do not close
+                            this window, we will send you an email soon!
+                        </p>
+                        {this.state.error && (
+                            <p className="error">
+                                Something went wrong, please try again!
+                            </p>
+                        )}
+                        <p>E-mail:</p>
+                        <input
+                            type="text"
+                            name="email"
+                            id="email"
+                            onChange={(e) => this.handleChange(e)}
+                            placeholder="e-mail"
+                        ></input>
+                        <button onClick={() => this.handleSendEmail()}>
+                            Submit
+                        </button>
+                    </div>
+                )}
+                {this.state.step == 2 && (
+                    <div>
+                        {this.state.error && (
+                            <p className="error">
+                                Something went wrong, please try again!
+                            </p>
+                        )}
+                        <p>
+                            Please insert your secret code and the new password!
+                        </p>
+                        <input
+                            type="text"
+                            name="code"
+                            id="code"
+                            onChange={(e) => this.handleChange(e)}
+                            placeholder="secret code"
+                            autoComplete="off"
+                        ></input>
+                        <input
+                            type="password"
+                            name="newPassword"
+                            id="newPassword"
+                            onChange={(e) => this.handleChange(e)}
+                            placeholder="new password"
+                        ></input>
+                        <button onClick={() => this.changePassword()}>
+                            Submit
+                        </button>
+                    </div>
+                )}
+                {this.state.step == 3 && (
+                    <div>
+                        <p>Thank you for changing your password!</p>
+                        <p>
+                            Now you can <Link to="/login">log in</Link>!{" "}
+                        </p>
+                    </div>
+                )}
             </div>
         );
     }

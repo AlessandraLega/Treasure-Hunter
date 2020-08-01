@@ -17,3 +17,35 @@ module.exports.getHashedPw = function (email) {
     let params = [email];
     return db.query(q, params);
 };
+
+module.exports.checkIfUserExists = function (email) {
+    let q = `SELECT id FROM users
+            WHERE email = $1`;
+    let params = [email];
+    return db.query(q, params);
+};
+
+module.exports.addCode = function (email, secretCode) {
+    let q = `INSERT INTO reset_codes(email, code)
+            VALUES ($1, $2)`;
+    let params = [email, secretCode];
+    return db.query(q, params);
+};
+
+module.exports.checkCode = function (email) {
+    let q = `SELECT code FROM reset_codes 
+            WHERE email = $1 AND 
+            CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes'
+            ORDER BY created_at DESC
+            LIMIT 1`;
+    let params = [email];
+    return db.query(q, params);
+};
+
+module.exports.changePassword = function (email, newPassword) {
+    let q = `UPDATE users
+            SET password=$2
+            WHERE email =$1`;
+    let params = [email, newPassword];
+    return db.query(q, params);
+};

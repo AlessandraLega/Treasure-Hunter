@@ -4,6 +4,8 @@ const compression = require("compression");
 const cookieSession = require("cookie-session");
 const bc = require("./bc.js");
 const db = require("./db.js");
+const cryptoRandomString = require("crypto-random-string");
+const { sendEmail } = require("./ses");
 
 app.use(compression());
 
@@ -60,7 +62,6 @@ app.post("/login", (req, res) => {
             bc.compare(req.body.password, results.rows[0].password)
                 .then((boolean) => {
                     if (boolean) {
-                        req.session.id = results.rows[0].id;
                         res.json({ success: true });
                     } else {
                         res.json({ success: false });
@@ -73,6 +74,64 @@ app.post("/login", (req, res) => {
         })
         .catch((err) => {
             console.log("error in db.getHashedPassword: ", err);
+            res.json({ success: false });
+        });
+});
+
+app.post("/step1", (req, res) => {
+    req.session.email = req.body.email;
+    db.checkIfUserExists(req.body.email)
+        .then((results) => {
+            if (results.rows[0]) {
+                const secretCode = cryptoRandomString({
+                    length: 6,
+                });
+                console.log("secretCode :", secretCode);
+                db.addCode(req.body.email, secretCode)
+                    .then(() => {
+                        let text = `Here is your code ${secretCode}, go back to the website and reset your password!`;
+                        sendEmail(req.body.email, text, "Reset Password");
+                        res.json({
+                            success: true,
+                        });
+                    })
+                    .catch((err) => {
+                        console.log("error in addCode: ", err);
+                        res.json({ success: false });
+                    });
+            } else {
+                console.log("didnt work");
+                res.json({ success: false });
+            }
+        })
+        .catch((err) => {
+            console.log("error in check: ", err);
+            res.json({ success: false });
+        });
+});
+
+app.post("/step2", (req, res) => {
+    db.checkCode(req.session.email)
+        .then((results) => {
+            console.log("results.rows[0].code :", results.rows[0].code);
+            console.log("req.body.code :", req.body.code);
+            if (results.rows[0].code == req.body.code) {
+                bc.hash(req.body.newPassword).then((hashedPw) => {
+                    db.changePassword(req.session.email, hashedPw)
+                        .then(() => {
+                            res.json({ success: true });
+                        })
+                        .catch((err) => {
+                            console.log("error in changePassword: ", err);
+                            res.json({ success: false });
+                        });
+                });
+            } else {
+                res.json({ success: false });
+            }
+        })
+        .catch((err) => {
+            console.log("error in checkCode: ", err);
             res.json({ success: false });
         });
 });

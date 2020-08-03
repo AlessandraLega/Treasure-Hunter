@@ -6,6 +6,11 @@ const bc = require("./bc.js");
 const db = require("./db.js");
 const cryptoRandomString = require("crypto-random-string");
 const { sendEmail } = require("./ses");
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+const path = require("path");
+const s3 = require("./s3.js");
+const { s3Url } = require("./config.json");
 
 app.use(compression());
 
@@ -28,6 +33,24 @@ if (process.env.NODE_ENV != "production") {
 } else {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
+
+const diskStorage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, __dirname + "/uploads");
+    },
+    filename: function (req, file, callback) {
+        uidSafe(24).then(function (uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    },
+});
+
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152,
+    },
+});
 
 app.get("/welcome", (req, res) => {
     if (req.session.id) {
@@ -59,6 +82,7 @@ app.post("/register", (req, res) => {
 app.post("/login", (req, res) => {
     db.getHashedPw(req.body.email)
         .then((results) => {
+            req.session.id = results.rows[0].id;
             bc.compare(req.body.password, results.rows[0].password)
                 .then((boolean) => {
                     if (boolean) {
@@ -133,6 +157,41 @@ app.post("/step2", (req, res) => {
         .catch((err) => {
             console.log("error in checkCode: ", err);
             res.json({ success: false });
+        });
+});
+
+app.get("/user", (req, res) => {
+    db.getAllInfo(req.session.id)
+        .then((results) => {
+            res.json(results.rows[0]);
+        })
+        .catch((err) => {
+            console.log("error in getAllInfo: ", err);
+        });
+});
+
+app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
+    // console.log("req.file from index.js post/upload: ", req.file);
+    // console.log("req.body from index.js post/upload: ", req.body);
+    const { filename } = req.file;
+    const url = s3Url + filename;
+
+    // if (req.file) {
+    //     res.json({
+    //         success: true,
+    //     });
+    // } else {
+    //     res.json({
+    //         success: false,
+    //     });
+    // }
+
+    db.addImage(url, req.session.id)
+        .then((results) => {
+            res.json(results.rows[0]);
+        })
+        .catch((err) => {
+            console.log("error in addImage: ", err);
         });
 });
 

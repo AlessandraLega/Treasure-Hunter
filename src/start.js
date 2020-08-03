@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 //import axios from "axios";
 import Welcome from "./welcome";
-import Home from "./home";
+//import Home from "./home";
+import App from "./app";
 /*add logic to determine what to pass to ReactDOM.render
 if the url is /welcome, render your Welcome component
 if the url is not /welcome, render your small logo*/
@@ -12,7 +13,7 @@ let isLoggedIn = location.pathname != "/welcome";
 let elem;
 
 if (isLoggedIn) {
-    elem = <Home />;
+    elem = <App />;
 } else {
     elem = <Welcome />;
 }

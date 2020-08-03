@@ -49,3 +49,19 @@ module.exports.changePassword = function (email, newPassword) {
     let params = [email, newPassword];
     return db.query(q, params);
 };
+
+module.exports.getAllInfo = function (id) {
+    let q = `SELECT first, last, profile_pic, bio FROM users
+            WHERE id = $1`;
+    let params = [id];
+    return db.query(q, params);
+};
+
+module.exports.addImage = function (url, id) {
+    let q = `UPDATE users
+            SET profile_pic=$1
+            WHERE id=$2
+            RETURNING profile_pic`;
+    let params = [url, id];
+    return db.query(q, params);
+};

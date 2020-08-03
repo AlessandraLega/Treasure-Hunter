@@ -195,6 +195,16 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
         });
 });
 
+app.post("/bio", (req, res) => {
+    db.addBio(req.body.bio, req.session.id)
+        .then((results) => {
+            res.json(results.rows[0]);
+        })
+        .catch((err) => {
+            console.log("error in addBio: ", err);
+        });
+});
+
 app.get("*", function (req, res) {
     if (!req.session.id) {
         res.redirect("/welcome");

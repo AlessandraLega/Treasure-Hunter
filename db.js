@@ -65,3 +65,12 @@ module.exports.addImage = function (url, id) {
     let params = [url, id];
     return db.query(q, params);
 };
+
+module.exports.addBio = function (bio, id) {
+    let q = `UPDATE users
+            SET bio=$1
+            WHERE id=$2
+            RETURNING bio`;
+    let params = [bio, id];
+    return db.query(q, params);
+};

@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import App from "./app";
 
 export default class Uploader extends React.Component {
     constructor(props) {
@@ -20,8 +19,8 @@ export default class Uploader extends React.Component {
         axios
             .post("/upload", formData)
             .then(function (resp) {
-                console.log("it worked:", resp.data);
-                self.props.updateImage(resp.data.profile_pic).bind(this);
+                console.log("it worked:", resp.data.profile_pic);
+                self.props.updateImage(resp.data.profile_pic);
             })
             .catch(function (err) {
                 console.log("error in post /upload: ", err);

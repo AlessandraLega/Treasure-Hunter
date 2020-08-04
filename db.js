@@ -74,3 +74,11 @@ module.exports.addBio = function (bio, id) {
     let params = [bio, id];
     return db.query(q, params);
 };
+
+module.exports.getOtherUser = function (id) {
+    let q = `SELECT first, last, profile_pic, bio
+            FROM users
+            WHERE id=$1`;
+    let params = [id];
+    return db.query(q, params);
+};

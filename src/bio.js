@@ -18,27 +18,23 @@ export default class Bio extends React.Component {
         axios
             .post("/bio", { bio: this.state.bio })
             .then((response) => {
-                console.log(response.data.bio);
                 self.props.updateBio(response.data.bio);
+                self.toggleTextArea();
             })
             .catch((err) => {
                 console.log("error in post/bio: ", err);
             });
     }
     toggleTextArea() {
+        console.log("toggle");
         this.setState({
             editOpen: !this.state.editOpen,
         });
     }
     render() {
         return (
-            <React.Fragment>
-                <p>{this.state.bio}</p>
-                <img
-                    onClick={() => this.toggleTextArea()}
-                    src="pencil.png"
-                    alt="edit"
-                ></img>
+            <>
+                <h3>Bio</h3>
                 {this.state.editOpen && (
                     <>
                         <textarea
@@ -50,7 +46,33 @@ export default class Bio extends React.Component {
                         </button>
                     </>
                 )}
-            </React.Fragment>
+                {this.state.editOpen || (
+                    <>
+                        {this.props.bio && (
+                            <>
+                                <p>{this.props.bio}</p>
+                                <img
+                                    onClick={() => this.toggleTextArea()}
+                                    src="pencil.png"
+                                    alt="edit"
+                                    style={{
+                                        width: "50px",
+                                        height: "50px",
+                                    }}
+                                ></img>
+                            </>
+                        )}
+
+                        {this.props.bio || (
+                            <>
+                                <button onClick={() => this.toggleTextArea()}>
+                                    Add Bio!
+                                </button>
+                            </>
+                        )}
+                    </>
+                )}
+            </>
         );
     }
 }

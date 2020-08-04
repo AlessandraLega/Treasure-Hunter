@@ -198,10 +198,26 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
 app.post("/bio", (req, res) => {
     db.addBio(req.body.bio, req.session.id)
         .then((results) => {
+            console.log("results.rows[0] :", results.rows[0]);
             res.json(results.rows[0]);
         })
         .catch((err) => {
             console.log("error in addBio: ", err);
+        });
+});
+
+app.get("/other-user/:id", (req, res) => {
+    const id = req.params.id;
+    console.log("req.params: ", req.params);
+    console.log("bin ich da??");
+    db.getOtherUser(id)
+        .then((results) => {
+            console.log(results.rows[0]);
+            res.json(results.rows[0]);
+        })
+        .catch((err) => {
+            console.log("err in getOtherUser: ", err);
+            res.json({ success: false });
         });
 });
 

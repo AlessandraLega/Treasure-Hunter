@@ -4,6 +4,9 @@ import axios from "axios";
 import ProfilePic from "./profilePic";
 import Uploader from "./uploader";
 import Profile from "./profile";
+import otherProfile from "./otherProfile";
+import { BrowserRouter, Route } from "react-router-dom";
+import OtherProfile from "./otherProfile";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -14,12 +17,14 @@ export default class App extends React.Component {
         this.updateImage = this.updateImage.bind(this);
         this.updateBio = this.updateBio.bind(this);
     }
-    componentDidMount() {
-        axios
+    async componentDidMount() {
+        await axios
             .get("/user")
             .then(({ data }) => {
                 for (const prop in data) {
-                    this.setState({ [prop]: data[prop] });
+                    this.setState({ [prop]: data[prop] }, () =>
+                        console.log("this.state :", this.state)
+                    );
                 }
             })
             .catch((err) => {
@@ -45,7 +50,7 @@ export default class App extends React.Component {
     }
     render() {
         return (
-            <React.Fragment>
+            <BrowserRouter>
                 <p>the logo will be here!</p>
                 <img src="./logo.png" alt="logo"></img>
                 <ProfilePic
@@ -59,16 +64,26 @@ export default class App extends React.Component {
                 {this.state.uploaderIsVisible && (
                     <Uploader updateImage={this.updateImage} />
                 )}
-                <p>Welcome back {this.state.first}!</p>
-                <Profile
-                    first={this.state.first}
-                    last={this.state.last}
-                    url={this.state.profile_pic}
-                    bio={this.state.bio}
-                    updateBio={this.updateBio}
+                <Route
+                    exact
+                    path="/"
+                    render={() => {
+                        return (
+                            <Profile
+                                first={this.state.first}
+                                last={this.state.last}
+                                url={this.state.profile_pic}
+                                bio={this.state.bio}
+                                updateBio={this.updateBio}
+                                toggleModal={() => {
+                                    this.toggleModal();
+                                }}
+                            />
+                        );
+                    }}
                 />
-                <p>I am in app!</p>
-            </React.Fragment>
+                <Route path="/other-profile/" component={OtherProfile} />
+            </BrowserRouter>
         );
     }
 }

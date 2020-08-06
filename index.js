@@ -198,7 +198,6 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
 app.post("/bio", (req, res) => {
     db.addBio(req.body.bio, req.session.id)
         .then((results) => {
-            console.log("results.rows[0] :", results.rows[0]);
             res.json(results.rows[0]);
         })
         .catch((err) => {
@@ -208,16 +207,37 @@ app.post("/bio", (req, res) => {
 
 app.get("/other-user/:id", (req, res) => {
     const id = req.params.id;
-    console.log("req.params: ", req.params);
-    console.log("bin ich da??");
-    db.getOtherUser(id)
-        .then((results) => {
-            console.log(results.rows[0]);
-            res.json(results.rows[0]);
+    if (id == req.session.id) {
+        res.json({ sameUser: true });
+    } else {
+        db.getOtherUser(id)
+            .then((results) => {
+                res.json(results.rows[0]);
+            })
+            .catch((err) => {
+                console.log("err in getOtherUser: ", err);
+                res.json({ success: false });
+            });
+    }
+});
+
+app.get("/newUsers", (req, res) => {
+    db.getLastUsers()
+        .then(({ rows }) => {
+            res.json(rows);
         })
         .catch((err) => {
-            console.log("err in getOtherUser: ", err);
-            res.json({ success: false });
+            console.log("error in getLastUsers: ", err);
+        });
+});
+
+app.get("/search/:search", (req, res) => {
+    db.getSearch(req.params.search)
+        .then(({ rows }) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("err in getSearch: ", err);
         });
 });
 

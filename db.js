@@ -82,3 +82,18 @@ module.exports.getOtherUser = function (id) {
     let params = [id];
     return db.query(q, params);
 };
+
+module.exports.getLastUsers = function () {
+    let q = `SELECT * FROM users
+            ORDER BY created_at DESC
+            LIMIT 3`;
+    return db.query(q);
+};
+
+module.exports.getSearch = function (search) {
+    let q = `SELECT * FROM users
+            WHERE first
+            ILIKE $1`;
+    let params = [search + "%"];
+    return db.query(q, params);
+};

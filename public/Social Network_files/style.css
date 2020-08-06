@@ -1,0 +1,73 @@
+body {
+    margin: 0;
+    background-color: #fefae0;
+}
+
+header {
+    /* height: 100px; */
+    background-color: #606c38;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+#logo-title {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1 {
+    color: #bc6c25;
+    padding-left: 20px;
+}
+
+#logo {
+    width: 50px;
+    height: 50px;
+    background-color: #dda15e;
+}
+
+#logo-container {
+    padding: 20px;
+    background-color: #dda15e;
+    border-radius: 50%;
+    border: 3px #bc6c25 solid;
+}
+
+#profile-pic {
+    border: 3px #dda15e solid;
+    border-radius: 30%;
+    object-fit: cover;
+}
+
+.avatar {
+    height: 90px;
+    width: 90px;
+}
+
+.bigPic {
+    height: 200px;
+    width: 200px;
+}
+
+#edit {
+    height: 15px;
+    width: 15px;
+    display: blocks;
+    padding-left: 5px;
+}
+
+.inline {
+    display: inline;
+}
+/*
+606c38
+283618
+fefae0
+dda15e
+bc6c25
+*/

@@ -4,9 +4,9 @@ import axios from "axios";
 import ProfilePic from "./profilePic";
 import Uploader from "./uploader";
 import Profile from "./profile";
-import otherProfile from "./otherProfile";
 import { BrowserRouter, Route } from "react-router-dom";
 import OtherProfile from "./otherProfile";
+import FindPeople from "./findPeople";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -22,9 +22,7 @@ export default class App extends React.Component {
             .get("/user")
             .then(({ data }) => {
                 for (const prop in data) {
-                    this.setState({ [prop]: data[prop] }, () =>
-                        console.log("this.state :", this.state)
-                    );
+                    this.setState({ [prop]: data[prop] });
                 }
             })
             .catch((err) => {
@@ -51,16 +49,23 @@ export default class App extends React.Component {
     render() {
         return (
             <BrowserRouter>
-                <p>the logo will be here!</p>
-                <img src="./logo.png" alt="logo"></img>
-                <ProfilePic
-                    first={this.state.first}
-                    last={this.state.last}
-                    url={this.state.profile_pic}
-                    toggleModal={() => {
-                        this.toggleModal();
-                    }}
-                />
+                <header>
+                    <div id="logo-title">
+                        <div id="logo-container">
+                            <img src="/brush.png" alt="logo" id="logo" />
+                        </div>
+                        <h1>Title</h1>
+                    </div>
+                    <ProfilePic
+                        first={this.state.first}
+                        last={this.state.last}
+                        url={this.state.profile_pic}
+                        toggleModal={() => {
+                            this.toggleModal();
+                        }}
+                        className="avatar"
+                    />
+                </header>
                 {this.state.uploaderIsVisible && (
                     <Uploader updateImage={this.updateImage} />
                 )}
@@ -82,7 +87,8 @@ export default class App extends React.Component {
                         );
                     }}
                 />
-                <Route path="/other-profile/" component={OtherProfile} />
+                <Route path="/other-profile/:id" component={OtherProfile} />
+                <Route path="/findPeople" component={FindPeople} />
             </BrowserRouter>
         );
     }

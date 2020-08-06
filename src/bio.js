@@ -26,7 +26,6 @@ export default class Bio extends React.Component {
             });
     }
     toggleTextArea() {
-        console.log("toggle");
         this.setState({
             editOpen: !this.state.editOpen,
         });
@@ -34,36 +33,34 @@ export default class Bio extends React.Component {
     render() {
         return (
             <>
-                <h3>Bio</h3>
                 {this.state.editOpen && (
                     <>
+                        <h3>Bio</h3>
                         <textarea
                             name="bio"
                             onChange={(e) => this.handleChange(e)}
+                            defaultValue={this.props.bio}
                         ></textarea>
                         <button onClick={() => this.submit()}>
                             Change bio!
                         </button>
                     </>
                 )}
-                {this.state.editOpen || (
+                {!this.state.editOpen && (
                     <>
                         {this.props.bio && (
                             <>
-                                <p>{this.props.bio}</p>
+                                <h3 className="inline">Bio</h3>
                                 <img
+                                    id="edit"
                                     onClick={() => this.toggleTextArea()}
                                     src="pencil.png"
-                                    alt="edit"
-                                    style={{
-                                        width: "50px",
-                                        height: "50px",
-                                    }}
+                                    alt="edit bio"
                                 ></img>
+                                <p>{this.props.bio}</p>
                             </>
                         )}
-
-                        {this.props.bio || (
+                        {!this.props.bio && (
                             <>
                                 <button onClick={() => this.toggleTextArea()}>
                                     Add Bio!

@@ -1,22 +1,42 @@
 import React from "react";
 import axios from "axios";
+import ProfilePic from "./profilePic";
+import Bio from "./bio";
 
 export default class OtherProfile extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            error: false,
+        };
     }
     async componentDidMount() {
         const { id } = this.props.match.params;
-        console.log("this.props :", this.props);
-        await axios.get("/other-user/" + id).then((response) => {
-            console.log("response.data: ", response.data);
+        await axios.get("/other-user/" + id).then(({ data }) => {
+            if (data.sameUser) {
+                this.props.history.push("/");
+            } else {
+                console.log("data:", data);
+                for (const prop in data) {
+                    this.setState({ [prop]: data[prop] });
+                }
+            }
         });
     }
     render() {
         return (
             <>
-                <p>other profile</p>
+                {this.state.error && <p>this user doesn't exist!</p>}
+
+                <p>
+                    {this.state.first} {this.state.last}
+                </p>
+                <img
+                    style={{ height: "50px", width: "50px" }}
+                    src={this.state.profile_pic}
+                    alt={this.state.first}
+                ></img>
+                <p>{this.state.bio}</p>
             </>
         );
     }

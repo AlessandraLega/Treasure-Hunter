@@ -231,6 +231,26 @@ app.get("/newUsers", (req, res) => {
         });
 });
 
+app.get("/friendship/:otherId", (req, res) => {
+    const otherId = req.params.otherId;
+    const myId = req.session.id;
+    db.checkFriendship(otherId, myId)
+        .then(({ rows }) => {
+            console.log(rows);
+            if (!rows.length) {
+                res.json({
+                    friendship: "none",
+                });
+            } else {
+                rows[0].myId = req.session.id;
+                res.json(rows[0]);
+            }
+        })
+        .catch((err) => {
+            console.log("error in checkFriendship: ", err);
+        });
+});
+
 app.get("/search/:search", (req, res) => {
     db.getSearch(req.params.search)
         .then(({ rows }) => {
@@ -239,6 +259,48 @@ app.get("/search/:search", (req, res) => {
         .catch((err) => {
             console.log("err in getSearch: ", err);
         });
+});
+
+app.post("/update-friendship", (req, res) => {
+    if (req.body.button == "ask friendship") {
+        const sender_id = req.session.id;
+        const recipient_id = req.body.otherId;
+        db.addRequest(sender_id, recipient_id)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("error in addRequest: ", err);
+                res.json({ success: false });
+            });
+    } else if (
+        req.body.button == "cancel request" ||
+        req.body.button == "delete friend"
+    ) {
+        //delete row
+        const id1 = req.body.otherId;
+        const id2 = req.session.id;
+        db.deleteRequest(id1, id2)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("error in deleteRequest: ", err);
+                res.json({ success: false });
+            });
+    } else if (req.body.button == "accept request") {
+        //set to true
+        const sender_id = req.body.otherId;
+        const recipient_id = req.session.id;
+        db.acceptRequest(sender_id, recipient_id)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("error in acceptRequest: ", err);
+                res.json({ success: false });
+            });
+    }
 });
 
 app.get("*", function (req, res) {

@@ -93,7 +93,39 @@ module.exports.getLastUsers = function () {
 module.exports.getSearch = function (search) {
     let q = `SELECT * FROM users
             WHERE first
+            ILIKE $1
+            OR last
             ILIKE $1`;
     let params = [search + "%"];
     return db.query(q, params);
+};
+
+module.exports.checkFriendship = function (otherId, myId) {
+    let q = `SELECT * FROM friendships
+            WHERE (recipient_id = $1 AND sender_id = $2)
+            OR (recipient_id = $2 AND sender_id = $1)`;
+    let params = [otherId, myId];
+    return db.query(q, params);
+};
+
+module.exports.addRequest = function (sender_id, recipient_id) {
+    return db.query(
+        `INSERT INTO friendships(sender_id, recipient_id) VALUES ($1, $2)`,
+        [sender_id, recipient_id]
+    );
+};
+
+module.exports.deleteRequest = function (id1, id2) {
+    return db.query(
+        `DELETE FROM friendships  WHERE (recipient_id = $1 AND sender_id = $2)
+            OR (recipient_id = $2 AND sender_id = $1)`,
+        [id1, id2]
+    );
+};
+
+module.exports.acceptRequest = function (sender_id, recipient_id) {
+    return db.query(
+        `UPDATE friendships SET accepted= 'true' WHERE sender_id=$1 AND recipient_id=$2`,
+        [sender_id, recipient_id]
+    );
 };

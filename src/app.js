@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "./axios";
 //import { Link } from "react-router-dom";
 import ProfilePic from "./profilePic";
 import Uploader from "./uploader";
@@ -66,29 +66,31 @@ export default class App extends React.Component {
                         className="avatar"
                     />
                 </header>
-                {this.state.uploaderIsVisible && (
-                    <Uploader updateImage={this.updateImage} />
-                )}
-                <Route
-                    exact
-                    path="/"
-                    render={() => {
-                        return (
-                            <Profile
-                                first={this.state.first}
-                                last={this.state.last}
-                                url={this.state.profile_pic}
-                                bio={this.state.bio}
-                                updateBio={this.updateBio}
-                                toggleModal={() => {
-                                    this.toggleModal();
-                                }}
-                            />
-                        );
-                    }}
-                />
-                <Route path="/other-profile/:id" component={OtherProfile} />
-                <Route path="/findPeople" component={FindPeople} />
+                <div className="container">
+                    {this.state.uploaderIsVisible && (
+                        <Uploader updateImage={this.updateImage} />
+                    )}
+                    <Route
+                        exact
+                        path="/"
+                        render={() => {
+                            return (
+                                <Profile
+                                    first={this.state.first}
+                                    last={this.state.last}
+                                    url={this.state.profile_pic}
+                                    bio={this.state.bio}
+                                    updateBio={this.updateBio}
+                                    toggleModal={() => {
+                                        this.toggleModal();
+                                    }}
+                                />
+                            );
+                        }}
+                    />
+                    <Route path="/other-profile/:id" component={OtherProfile} />
+                    <Route path="/findPeople" component={FindPeople} />
+                </div>
             </BrowserRouter>
         );
     }

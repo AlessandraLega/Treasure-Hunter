@@ -3,7 +3,6 @@ import ProfilePic from "./profilePic";
 import Bio from "./bio";
 
 export default function Profile(props) {
-    console.log("props in Profile: ", props);
     const { first, last, url, bio, updateBio, toggleModal } = props;
     return (
         <React.Fragment>

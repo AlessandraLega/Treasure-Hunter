@@ -21,7 +21,7 @@ header {
 }
 
 h1 {
-    color: #bc6c25;
+    color: #283618;
     padding-left: 20px;
 }
 
@@ -38,7 +38,7 @@ h1 {
     border: 3px #bc6c25 solid;
 }
 
-#profile-pic {
+.profile-pic {
     border: 3px #dda15e solid;
     border-radius: 30%;
     object-fit: cover;
@@ -63,6 +63,24 @@ h1 {
 
 .inline {
     display: inline;
+}
+
+.container {
+    padding: 20px;
+}
+
+.search-people {
+    padding: 10px;
+    /*background-color: #606c38;*/
+}
+
+a:link {
+    text-decoration: none;
+    color: #283618;
+}
+
+a:visited {
+    color: #283618;
 }
 /*
 606c38

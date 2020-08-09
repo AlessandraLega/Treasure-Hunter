@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "./axios";
 
 export default function FindPeople() {
     const [people, setPeople] = useState([]);
@@ -16,8 +16,6 @@ export default function FindPeople() {
         })();
     }, []);
 
-    console.log({ people });
-
     const handleChange = (e) => {
         setSearch(e.target.value);
     };
@@ -28,7 +26,6 @@ export default function FindPeople() {
             if (search) {
                 try {
                     const response = await axios.get(`/search/${search}`);
-                    console.log("reseponse :", response);
                     setPeople(response.data);
                     if (!abort) {
                         setPeople(response.data);
@@ -47,14 +44,21 @@ export default function FindPeople() {
 
     return (
         <div>
+            <p>Find new friends!</p>
             <input name="search" type="text" onChange={handleChange}></input>
             {people.map((person, i) => {
                 return (
-                    <div key={i}>
-                        <img className="avatar" src={person.profile_pic}></img>
-                        <p>
-                            {person.first} {person.last}
-                        </p>
+                    <div key={i} className="search-people">
+                        <a href={"/other-profile/" + person.id}>
+                            <img
+                                className="profile-pic"
+                                src={person.profile_pic}
+                                style={{ height: "100px", width: "100px" }}
+                            ></img>
+                            <p>
+                                {person.first} {person.last}
+                            </p>
+                        </a>
                     </div>
                 );
             })}

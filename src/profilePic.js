@@ -7,15 +7,16 @@ export default function profilePic({
     toggleModal,
     className,
 }) {
+    const classNames = `${className} profile-pic`;
     const fullName = first + " " + last;
     url = url || "/user.png";
     return (
         <img
-            id="profile-pic"
+            // className=
             src={url}
             alt={fullName}
             onClick={() => toggleModal()}
-            className={className}
+            className={classNames}
         ></img>
     );
 }

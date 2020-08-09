@@ -11,6 +11,7 @@ const uidSafe = require("uid-safe");
 const path = require("path");
 const s3 = require("./s3.js");
 const { s3Url } = require("./config.json");
+const csurf = require("csurf");
 
 app.use(compression());
 
@@ -33,6 +34,13 @@ if (process.env.NODE_ENV != "production") {
 } else {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
+
+app.use(csurf());
+
+app.use(function (req, res, next) {
+    res.cookie("mytoken", req.csrfToken());
+    next();
+});
 
 const diskStorage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -207,16 +215,17 @@ app.post("/bio", (req, res) => {
 
 app.get("/other-user/:id", (req, res) => {
     const id = req.params.id;
+    console.log("id", id);
     if (id == req.session.id) {
         res.json({ sameUser: true });
     } else {
         db.getOtherUser(id)
             .then((results) => {
+                console.log("results.rows[0] :", results.rows[0]);
                 res.json(results.rows[0]);
             })
             .catch((err) => {
                 console.log("err in getOtherUser: ", err);
-                res.json({ success: false });
             });
     }
 });
@@ -236,7 +245,7 @@ app.get("/friendship/:otherId", (req, res) => {
     const myId = req.session.id;
     db.checkFriendship(otherId, myId)
         .then(({ rows }) => {
-            console.log(rows);
+            //console.log(rows);
             if (!rows.length) {
                 res.json({
                     friendship: "none",

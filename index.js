@@ -312,6 +312,22 @@ app.post("/update-friendship", (req, res) => {
     }
 });
 
+app.get("/friends-wannabes", (req, res) => {
+    db.getFriendsWannabes(req.session.id)
+        .then(({ rows }) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("error in acceptRequest: ", err);
+            res.json({ success: false });
+        });
+});
+
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/login");
+});
+
 app.get("*", function (req, res) {
     if (!req.session.id) {
         res.redirect("/welcome");

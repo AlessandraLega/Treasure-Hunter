@@ -4,6 +4,8 @@ var db = spicedPg(
         "postgres:alessandra:postgres@localhost:5432/caper-socialnetwork"
 );
 
+//sudo service postgresql start
+
 module.exports.addUser = function (first, last, email, hashedPw) {
     let q = `INSERT INTO users (first, last, email, password)
             VALUES ($1, $2, $3, $4) RETURNING id`;
@@ -127,5 +129,17 @@ module.exports.acceptRequest = function (sender_id, recipient_id) {
     return db.query(
         `UPDATE friendships SET accepted= 'true' WHERE sender_id=$1 AND recipient_id=$2`,
         [sender_id, recipient_id]
+    );
+};
+
+module.exports.getFriendsWannabes = function (id) {
+    return db.query(
+        `SELECT users.id, first, last, profile_pic, accepted
+      FROM friendships
+      JOIN users
+      ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)
+      OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
+      OR (accepted = true AND sender_id = $1 AND recipient_id = users.id)`,
+        [id]
     );
 };

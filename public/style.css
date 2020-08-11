@@ -6,11 +6,25 @@ body {
 header {
     /* height: 100px; */
     background-color: #606c38;
-    display: flex;
-    flex-flow: row;
-    justify-content: space-between;
+    display: grid;
+    grid-template-rows: 50px 100px;
+    grid-template-columns: 50% 50%;
     align-items: center;
     padding: 10px;
+}
+
+nav {
+    grid-column: 1/3;
+    justify-self: end;
+}
+
+#logout {
+    height: 50px;
+    width: 100vw;
+    margin: 0;
+    background-color: #606c38;
+    text-align: right;
+    color: #dda15e;
 }
 
 #logo-title {
@@ -36,6 +50,8 @@ h1 {
     background-color: #dda15e;
     border-radius: 50%;
     border: 3px #bc6c25 solid;
+    display: flex;
+    justify-content: flex-start;
 }
 
 .profile-pic {
@@ -47,6 +63,7 @@ h1 {
 .avatar {
     height: 90px;
     width: 90px;
+    justify-self: end;
 }
 
 .bigPic {

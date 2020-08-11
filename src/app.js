@@ -4,9 +4,10 @@ import axios from "./axios";
 import ProfilePic from "./profilePic";
 import Uploader from "./uploader";
 import Profile from "./profile";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 import OtherProfile from "./otherProfile";
 import FindPeople from "./findPeople";
+import Friends from "./friends";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -50,6 +51,17 @@ export default class App extends React.Component {
         return (
             <BrowserRouter>
                 <header>
+                    <nav>
+                        <Link to={"/findPeople"}>find Friends</Link>
+                        <span> | </span>
+                        <Link to={"/friends"}>my Friends</Link>
+                        <span> | </span>
+                        <Link to={"/profile"}>my Profile</Link>
+                        <span> | </span>
+                        <a id="logout" href="/logout">
+                            Log out
+                        </a>
+                    </nav>
                     <div id="logo-title">
                         <div id="logo-container">
                             <img src="/brush.png" alt="logo" id="logo" />
@@ -90,6 +102,7 @@ export default class App extends React.Component {
                     />
                     <Route path="/other-profile/:id" component={OtherProfile} />
                     <Route path="/findPeople" component={FindPeople} />
+                    <Route path="/friends" component={Friends} />
                 </div>
             </BrowserRouter>
         );

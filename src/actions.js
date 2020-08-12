@@ -16,7 +16,7 @@ export async function accept(id) {
     });
     return {
         type: "ACCEPT",
-        accepted: true,
+        id,
     };
 }
 
@@ -25,11 +25,8 @@ export async function deleteFriend(id) {
         button: "delete friend",
         otherId: id,
     });
-    const newFriends = friendsWannabes.filter((person) => {
-        return person.id != id;
-    });
     return {
         type: "DELETE_FRIEND",
-        friendsWannabes: newFriends,
+        id,
     };
 }

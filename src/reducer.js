@@ -4,18 +4,23 @@ export default function reducer(state = {}, action) {
             friendsWannabes: action.friendsWannabes,
         });
     } else if (action.type == "ACCEPT") {
-        const friendsWannabes = {
-            ...state.friendsWannabes,
-            accepted: action.accepted,
+        state = {
+            ...state,
+            friendsWannabes: state.friendsWannabes.map((person) => {
+                if (person.id == action.id) {
+                    return { ...person, accepted: true };
+                } else {
+                    return person;
+                }
+            }),
         };
-        return { ...state, friendsWannabes };
     } else if (action.type == "DELETE_FRIEND") {
-        const friendsWannabes = {
-            ...state.friendsWannabes,
-            friendsWannabes: action.friendsWannabes,
+        state = {
+            ...state,
+            friendsWannabes: state.friendsWannabes.filter((person) => {
+                return person.id != action.id;
+            }),
         };
-        return { ...state, friendsWannabes };
     }
-
     return state;
 }

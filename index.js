@@ -12,17 +12,24 @@ const path = require("path");
 const s3 = require("./s3.js");
 const { s3Url } = require("./config.json");
 const csurf = require("csurf");
+const server = require("http").Server(app);
+const io = require("socket.io")(server, { origins: "localhost:8080" });
 
 app.use(compression());
 
 app.use(express.static("public"));
 app.use(express.json());
-app.use(
-    cookieSession({
-        secret: "learning about react!!",
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-    })
-);
+
+const cookieSessionMiddleware = cookieSession({
+    secret: "learning about react!!",
+    maxAge: 1000 * 60 * 60 * 24 * 14,
+});
+
+app.use(cookieSessionMiddleware);
+
+io.use(function (socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 
 if (process.env.NODE_ENV != "production") {
     app.use(
@@ -221,7 +228,6 @@ app.get("/other-user/:id", (req, res) => {
     } else {
         db.getOtherUser(id)
             .then((results) => {
-                console.log("results.rows[0] :", results.rows[0]);
                 res.json(results.rows[0]);
             })
             .catch((err) => {
@@ -336,6 +342,6 @@ app.get("*", function (req, res) {
     }
 });
 
-app.listen(8080, function () {
+server.listen(8080, function () {
     console.log("I'm listening.");
 });

@@ -26,6 +26,10 @@ export default function Friends() {
         );
     });
 
+    if (!wannabes || !friends) {
+        return null;
+    }
+
     console.log("wannabes", wannabes);
 
     return (
@@ -39,7 +43,11 @@ export default function Friends() {
                             <p>
                                 {user.first} {user.last}
                             </p>
-                            <button onClick={dispatch(accept(user.id))}>
+                            <button
+                                onClick={() => {
+                                    dispatch(accept(user.id));
+                                }}
+                            >
                                 Accept
                             </button>
                         </div>
@@ -53,7 +61,11 @@ export default function Friends() {
                         <p>
                             {user.first} {user.last}
                         </p>
-                        <button onClick={dispatch(deleteFriend(user.id))}>
+                        <button
+                            onClick={() => {
+                                dispatch(deleteFriend(user.id));
+                            }}
+                        >
                             Delete
                         </button>
                     </div>

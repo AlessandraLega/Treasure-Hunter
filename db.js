@@ -143,3 +143,20 @@ module.exports.getFriendsWannabes = function (id) {
         [id]
     );
 };
+
+module.exports.getLastTen = function () {
+    return db.query(
+        `SELECT * FROM chat_messages
+        ORDER BY created_at DESC
+        LIMIT 10`
+    );
+};
+
+module.exports.addMessage = function (message, sender_id) {
+    return db.query(
+        `INSERT INTO chat_messages (message, sender_id)
+        VALUES ( $1, $2)
+        RETURNING *`,
+        [message, sender_id]
+    );
+};

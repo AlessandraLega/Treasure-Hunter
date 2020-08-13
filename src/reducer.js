@@ -21,6 +21,16 @@ export default function reducer(state = {}, action) {
                 return person.id != action.id;
             }),
         };
+    } else if (action.type == "GET_LAST_TEN") {
+        state = {
+            ...state,
+            lastTen: action.lastTen,
+        };
+    } else if (action.type == "NEW_MESSAGE") {
+        state = {
+            ...state,
+            lastTen: [...state.lastTen, action.newMessage],
+        };
     }
     return state;
 }

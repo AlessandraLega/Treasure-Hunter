@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Link } from "react-router-dom";
 import OtherProfile from "./otherProfile";
 import FindPeople from "./findPeople";
 import Friends from "./friends";
+import Chat from "./chat";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -58,6 +59,8 @@ export default class App extends React.Component {
                         <span> | </span>
                         <Link to={"/profile"}>my Profile</Link>
                         <span> | </span>
+                        <Link to={"/chat"}>Chat</Link>
+                        <span> | </span>
                         <a id="logout" href="/logout">
                             Log out
                         </a>
@@ -103,6 +106,7 @@ export default class App extends React.Component {
                     <Route path="/other-profile/:id" component={OtherProfile} />
                     <Route path="/findPeople" component={FindPeople} />
                     <Route path="/friends" component={Friends} />
+                    <Route path="/chat" component={Chat} />
                 </div>
             </BrowserRouter>
         );

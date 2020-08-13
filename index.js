@@ -329,6 +329,8 @@ app.get("/friends-wannabes", (req, res) => {
         });
 });
 
+app.get("/get-last-ten", (req, res) => {});
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/login");
@@ -344,4 +346,27 @@ app.get("*", function (req, res) {
 
 server.listen(8080, function () {
     console.log("I'm listening.");
+});
+
+io.on("connection", (socket) => {
+    const { id } = socket.request.session;
+    if (!id) {
+        return socket.disconnect();
+    }
+
+    socket.on("chatMessages", (data) => {
+        db.getLastTen()
+            .then((results) => {
+                return io.emit("chatMessages", results.rows);
+            })
+            .catch((err) => console.log("error in getLastTen: ", err));
+    });
+
+    socket.on("chatMessage", (data) => {
+        db.addMessage(data, id)
+            .then((results) => {
+                return io.emit("chatMessage", results.rows[0]);
+            })
+            .catch((err) => console.log("error in addMessage: ", err));
+    });
 });

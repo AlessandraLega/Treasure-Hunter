@@ -53,7 +53,7 @@ module.exports.changePassword = function (email, newPassword) {
 };
 
 module.exports.getAllInfo = function (id) {
-    let q = `SELECT first, last, profile_pic, bio FROM users
+    let q = `SELECT id, first, last, profile_pic, bio FROM users
             WHERE id = $1`;
     let params = [id];
     return db.query(q, params);
@@ -146,8 +146,8 @@ module.exports.getFriendsWannabes = function (id) {
 
 module.exports.getLastTen = function () {
     return db.query(
-        `SELECT * FROM chat_messages
-        ORDER BY created_at DESC
+        `SELECT chat_messages.message, chat_messages.created_at, chat_messages.sender_id AS id, users.first, users.last, users.profile_pic FROM chat_messages LEFT JOIN users ON chat_messages.sender_id=users.id
+        ORDER BY chat_messages.created_at DESC
         LIMIT 10`
     );
 };
@@ -155,8 +155,36 @@ module.exports.getLastTen = function () {
 module.exports.addMessage = function (message, sender_id) {
     return db.query(
         `INSERT INTO chat_messages (message, sender_id)
-        VALUES ( $1, $2)
-        RETURNING *`,
+        VALUES ($1, $2)`,
         [message, sender_id]
     );
 };
+
+module.exports.getLastMessage = function () {
+    return db.query(
+        `SELECT chat_messages.message, chat_messages.created_at, chat_messages.sender_id AS id, users.first, users.last, users.profile_pic FROM chat_messages LEFT JOIN users ON chat_messages.sender_id=users.id
+        ORDER BY chat_messages.created_at DESC
+        LIMIT 1`
+    );
+};
+
+module.exports.getAllPosts = function (id) {
+    return db.query(
+        `SELECT posts.post, posts.created_at, users.first, users.last, users.profile_pic FROM posts
+        LEFT JOIN users
+        ON posts.sender_id = users.id
+        WHERE wall_id = $1
+        `,
+        [id]
+    );
+};
+
+module.exports.addPost = function (sender_id, post, wall_id) {
+    return db.query(
+        `INSERT INTO posts (sender_id, post, wall_id)
+        VALUES ($1, $2, $3)`,
+        [sender_id, post, wall_id]
+    );
+};
+
+//INSERT INTO posts (sender_id, post, wall_id) VALUES (68, 'you are great', 108);

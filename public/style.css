@@ -1,61 +1,57 @@
 body {
     margin: 0;
-    background-color: #fefae0;
+    background-color: #f0efeb;
 }
 
 header {
     /* height: 100px; */
-    background-color: #606c38;
-    display: grid;
-    grid-template-rows: 50px 100px;
-    grid-template-columns: 50% 50%;
-    align-items: center;
+    background-color: #eddcd2;
+    display: flex;
+    /*     grid-template-columns: 1fr 1fr 1fr;
+    align-items: center; */
+    justify-content: space-between;
     padding: 10px;
 }
 
 nav {
     grid-column: 1/3;
     justify-self: end;
+    color: #cb997e;
+}
+
+.nav-link {
+    color: #a5a58d;
 }
 
 #logout {
     height: 50px;
     width: 100vw;
     margin: 0;
-    background-color: #606c38;
     text-align: right;
-    color: #dda15e;
-}
-
-#logo-title {
-    display: flex;
-    flex-flow: row;
-    justify-content: space-between;
-    align-items: center;
+    color: #cb997e;
 }
 
 h1 {
-    color: #283618;
+    color: #cb997e;
     padding-left: 20px;
 }
 
 #logo {
-    width: 50px;
-    height: 50px;
-    background-color: #dda15e;
+    width: 100px;
+    height: 100px;
 }
 
-#logo-container {
+/* #logo-container {
     padding: 20px;
-    background-color: #dda15e;
+    background-color: #cb997e;
     border-radius: 50%;
-    border: 3px #bc6c25 solid;
+    border: 3px #cb997e solid;
     display: flex;
     justify-content: flex-start;
-}
+} */
 
 .profile-pic {
-    border: 3px #dda15e solid;
+    border: 3px #cb997e solid;
     border-radius: 30%;
     object-fit: cover;
 }
@@ -99,6 +95,65 @@ a:link {
 a:visited {
     color: #283618;
 }
+
+/* chat + wall style */
+
+#chat {
+    background-color: white;
+}
+
+.chat-bubble {
+    background-color: #eddcd2;
+    margin: 10px;
+    padding-top: 5px;
+}
+
+.sender {
+    margin: 5px;
+    color: #cb997e;
+}
+
+.date {
+    color: black;
+    font-size: 10px;
+}
+
+.pic-message {
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.sender-pic {
+    height: 30px;
+    width: 30px;
+    margin: 5px;
+}
+
+.message {
+    margin: 5px;
+}
+
+.profile-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+}
+
+/* wall */
+.wall {
+}
+
+.post-container {
+    background-color: #eddcd2;
+}
+
+/*
+cb997e scuro scritte
+eddcd2 background darker
+fff1e6 rosa chiaro
+f0efeb background sfondo
+
 /*
 606c38
 283618

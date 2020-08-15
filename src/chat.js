@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { socket } from "./socket";
-import { chatMessages } from "./actions";
 
 export default function Chat() {
     const [message, setMessage] = useState();
-    const dispatch = useDispatch();
 
     useEffect(() => {
         socket.emit("chatMessages");
-    }, [message]);
+    }, []);
 
     const lastTen = useSelector((state) => {
         return (
@@ -21,17 +19,30 @@ export default function Chat() {
     });
 
     const sendEmpty = (e) => {
-        e.target.value = "";
+        e.preventDefault();
         socket.emit("chatMessage", message);
+        document.querySelector("textarea").value = "";
     };
-    console.log("lastTen :", lastTen);
 
     return (
         <div>
             <div id="chat">
                 {lastTen &&
                     lastTen.map((message, i) => {
-                        return <p>{message.message}</p>;
+                        return (
+                            <div className="chat-bubble" key={i}>
+                                <p className="sender">
+                                    {message.first} {message.last}
+                                </p>
+                                <div className="pic-message">
+                                    <img
+                                        className="sender-pic"
+                                        src={message.profile_pic}
+                                    />
+                                    <p className="message">{message.message}</p>
+                                </div>
+                            </div>
+                        );
                     })}
             </div>
             <textarea

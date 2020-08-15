@@ -329,11 +329,41 @@ app.get("/friends-wannabes", (req, res) => {
         });
 });
 
-app.get("/get-last-ten", (req, res) => {});
-
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/login");
+});
+
+app.get("/all-posts/:id", (req, res) => {
+    let id = req.params.id;
+    db.getAllPosts(id)
+        .then((results) => {
+            res.json(results.rows);
+        })
+        .catch((err) => {
+            console.log("error in getAllPost: ", err);
+            res.json({ success: false });
+        });
+});
+
+app.post("/new-post", (req, res) => {
+    const sender_id = req.session.id;
+    const { newPost, id } = req.body;
+    db.addPost(sender_id, newPost, id)
+        .then(() => {
+            db.getAllPosts(id)
+                .then((results) => {
+                    res.json(results.rows);
+                })
+                .catch((err) => {
+                    console.log("error in getAllPost: ", err);
+                    res.json({ success: false });
+                });
+        })
+        .catch((err) => {
+            console.log("error in addPost: ", err);
+            res.json({ success: false });
+        });
 });
 
 app.get("*", function (req, res) {
@@ -354,9 +384,10 @@ io.on("connection", (socket) => {
         return socket.disconnect();
     }
 
-    socket.on("chatMessages", (data) => {
+    socket.on("chatMessages", () => {
         db.getLastTen()
             .then((results) => {
+                console.log("results.rows :", results.rows);
                 return io.emit("chatMessages", results.rows);
             })
             .catch((err) => console.log("error in getLastTen: ", err));
@@ -364,8 +395,14 @@ io.on("connection", (socket) => {
 
     socket.on("chatMessage", (data) => {
         db.addMessage(data, id)
-            .then((results) => {
-                return io.emit("chatMessage", results.rows[0]);
+            .then(() => {
+                db.getLastMessage()
+                    .then((results) => {
+                        return io.emit("chatMessage", results.rows[0]);
+                    })
+                    .catch((err) =>
+                        console.log("error in getLastMessage: ", err)
+                    );
             })
             .catch((err) => console.log("error in addMessage: ", err));
     });

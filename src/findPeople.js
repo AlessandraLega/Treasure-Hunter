@@ -49,7 +49,7 @@ export default function FindPeople() {
             {people.map((person, i) => {
                 return (
                     <div key={i} className="search-people">
-                        <a href={"/other-profile/" + person.id}>
+                        <Link to={"/other-profile/" + person.id}>
                             <img
                                 className="profile-pic"
                                 src={person.profile_pic}
@@ -58,7 +58,7 @@ export default function FindPeople() {
                             <p>
                                 {person.first} {person.last}
                             </p>
-                        </a>
+                        </Link>
                     </div>
                 );
             })}

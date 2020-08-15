@@ -52,34 +52,40 @@ export default class App extends React.Component {
         return (
             <BrowserRouter>
                 <header>
-                    <nav>
-                        <Link to={"/findPeople"}>find Friends</Link>
-                        <span> | </span>
-                        <Link to={"/friends"}>my Friends</Link>
-                        <span> | </span>
-                        <Link to={"/profile"}>my Profile</Link>
-                        <span> | </span>
-                        <Link to={"/chat"}>Chat</Link>
-                        <span> | </span>
-                        <a id="logout" href="/logout">
-                            Log out
-                        </a>
-                    </nav>
-                    <div id="logo-title">
-                        <div id="logo-container">
-                            <img src="/brush.png" alt="logo" id="logo" />
-                        </div>
-                        <h1>Title</h1>
+                    <img src="/heart.png" alt="logo" id="logo" />
+                    <h1>Compliments</h1>
+                    <div id="nav-avatar">
+                        <nav>
+                            <Link to={"/findPeople"}>
+                                <span className="nav-link">find Friends</span>
+                            </Link>
+                            <span> | </span>
+                            <Link to={"/friends"}>
+                                <span className="nav-link">my Friends</span>
+                            </Link>
+                            <span> | </span>
+                            <Link to={"/"}>
+                                <span className="nav-link">my Profile</span>
+                            </Link>
+                            <span> | </span>
+                            <Link to={"/chat"}>
+                                <span className="nav-link">Chat</span>
+                            </Link>
+                            <span> | </span>
+                            <a id="logout" href="/logout">
+                                Log out
+                            </a>
+                        </nav>
+                        <ProfilePic
+                            first={this.state.first}
+                            last={this.state.last}
+                            url={this.state.profile_pic}
+                            toggleModal={() => {
+                                this.toggleModal();
+                            }}
+                            className="avatar"
+                        />
                     </div>
-                    <ProfilePic
-                        first={this.state.first}
-                        last={this.state.last}
-                        url={this.state.profile_pic}
-                        toggleModal={() => {
-                            this.toggleModal();
-                        }}
-                        className="avatar"
-                    />
                 </header>
                 <div className="container">
                     {this.state.uploaderIsVisible && (
@@ -91,6 +97,7 @@ export default class App extends React.Component {
                         render={() => {
                             return (
                                 <Profile
+                                    id={this.state.id}
                                     first={this.state.first}
                                     last={this.state.last}
                                     url={this.state.profile_pic}

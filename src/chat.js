@@ -4,10 +4,24 @@ import { socket } from "./socket";
 
 export default function Chat() {
     const [message, setMessage] = useState();
+    const elemRef = useRef();
 
     useEffect(() => {
         socket.emit("chatMessages");
     }, []);
+
+    useEffect(() => {
+        elemRef.current.scrollTop =
+            elemRef.current.scrollHeight - elemRef.current.clientHeight;
+        console.log(
+            "elemRef.current.scrollHeight :",
+            elemRef.current.scrollHeight
+        );
+        console.log(
+            "elemRef.current.clientHeight :",
+            elemRef.current.clientHeight
+        );
+    });
 
     const lastTen = useSelector((state) => {
         return (
@@ -26,7 +40,7 @@ export default function Chat() {
 
     return (
         <div>
-            <div id="chat">
+            <div id="chat" ref={elemRef}>
                 {lastTen &&
                     lastTen.map((message, i) => {
                         return (
@@ -45,11 +59,18 @@ export default function Chat() {
                         );
                     })}
             </div>
-            <textarea
-                name="message"
-                onChange={(e) => setMessage(e.target.value)}
-            ></textarea>
-            <button onClick={(e) => sendEmpty(e)}>Send</button>
+            <div id="textarea-button">
+                <textarea
+                    name="message"
+                    rows="5"
+                    cols="33"
+                    placeholder="write something nice for everyone!"
+                    onChange={(e) => setMessage(e.target.value)}
+                ></textarea>
+                <button id="button-chat" onClick={(e) => sendEmpty(e)}>
+                    Send
+                </button>
+            </div>
         </div>
     );
 }

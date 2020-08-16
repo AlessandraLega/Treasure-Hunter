@@ -60,12 +60,18 @@ export default class Login extends React.Component {
                     placeholder="password"
                     autoComplete="off"
                 />
+                <br></br>
                 <button id="submit" onClick={() => this.submit()}>
                     Log in!
                 </button>
                 <p>
                     have you forgotten your password?{" "}
                     <Link to="/resetPassword">Reset your password here!</Link>
+                </p>
+
+                <p>
+                    You want to create a new account?{" "}
+                    <Link to="/">Register</Link> here
                 </p>
             </div>
         );

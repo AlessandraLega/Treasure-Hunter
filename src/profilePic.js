@@ -12,7 +12,6 @@ export default function profilePic({
     url = url || "/user.png";
     return (
         <img
-            // className=
             src={url}
             alt={fullName}
             onClick={() => toggleModal()}

@@ -31,7 +31,6 @@ export async function deleteFriend(id) {
 }
 
 export function chatMessages(lastTen) {
-    console.log("lastTen in action :", lastTen);
     return {
         type: "GET_LAST_TEN",
         lastTen,
@@ -39,7 +38,6 @@ export function chatMessages(lastTen) {
 }
 
 export function newMessage(newMessage) {
-    console.log("newMessage in action:", newMessage);
     return {
         type: "NEW_MESSAGE",
         newMessage,

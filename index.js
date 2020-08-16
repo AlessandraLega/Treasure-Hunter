@@ -125,7 +125,6 @@ app.post("/step1", (req, res) => {
                 const secretCode = cryptoRandomString({
                     length: 6,
                 });
-                console.log("secretCode :", secretCode);
                 db.addCode(req.body.email, secretCode)
                     .then(() => {
                         let text = `Here is your code ${secretCode}, go back to the website and reset your password!`;
@@ -152,8 +151,8 @@ app.post("/step1", (req, res) => {
 app.post("/step2", (req, res) => {
     db.checkCode(req.session.email)
         .then((results) => {
-            console.log("results.rows[0].code :", results.rows[0].code);
-            console.log("req.body.code :", req.body.code);
+            // console.log("results.rows[0].code :", results.rows[0].code);
+            // console.log("req.body.code :", req.body.code);
             if (results.rows[0].code == req.body.code) {
                 bc.hash(req.body.newPassword).then((hashedPw) => {
                     db.changePassword(req.session.email, hashedPw)
@@ -222,7 +221,7 @@ app.post("/bio", (req, res) => {
 
 app.get("/other-user/:id", (req, res) => {
     const id = req.params.id;
-    console.log("id", id);
+    // console.log("id", id);
     if (id == req.session.id) {
         res.json({ sameUser: true });
     } else {
@@ -338,7 +337,12 @@ app.get("/all-posts/:id", (req, res) => {
     let id = req.params.id;
     db.getAllPosts(id)
         .then((results) => {
-            res.json(results.rows);
+            if (results.rows.length) {
+                res.json(results.rows);
+            } else {
+                console.log("no friends!");
+                res.json({ success: false });
+            }
         })
         .catch((err) => {
             console.log("error in getAllPost: ", err);
@@ -387,7 +391,6 @@ io.on("connection", (socket) => {
     socket.on("chatMessages", () => {
         db.getLastTen()
             .then((results) => {
-                console.log("results.rows :", results.rows);
                 return io.emit("chatMessages", results.rows);
             })
             .catch((err) => console.log("error in getLastTen: ", err));
@@ -396,7 +399,7 @@ io.on("connection", (socket) => {
     socket.on("chatMessage", (data) => {
         db.addMessage(data, id)
             .then(() => {
-                db.getLastMessage()
+                db.getLastMessage(id)
                     .then((results) => {
                         return io.emit("chatMessage", results.rows[0]);
                     })

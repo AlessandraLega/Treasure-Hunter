@@ -1,7 +1,5 @@
 import React from "react";
 import axios from "./axios";
-import ProfilePic from "./profilePic";
-import Bio from "./bio";
 import FriendButton from "./friendButton";
 import Wall from "./wall";
 
@@ -10,11 +8,12 @@ export default class OtherProfile extends React.Component {
         super(props);
         this.state = {
             error: false,
+            friends: false,
         };
     }
     async componentDidMount() {
         const { id } = this.props.match.params;
-        await axios.get("/other-user/" + id).then(({ data }) => {
+        axios.get("/other-user/" + id).then(({ data }) => {
             if (data.sameUser) {
                 this.props.history.push("/");
             } else if (!data) {
@@ -24,17 +23,23 @@ export default class OtherProfile extends React.Component {
                 for (const prop in data) {
                     this.setState({ [prop]: data[prop] });
                 }
+                this.state.profile_pic = this.state.profile_pic || "/user.png";
+                axios.get("/friendship/" + id).then(({ data }) => {
+                    if (data.accepted) {
+                        this.setState({ friends: true });
+                    }
+                });
             }
         });
     }
     render() {
         return (
-            <div className="profile-container">
-                {this.state.error && <p>this user doesn't exist!</p>}
+            <div id="profile-container">
+                {this.state.error && <p>this user does not exist!</p>}
                 <div id="profile">
-                    <p>
+                    <h2>
                         {this.state.first} {this.state.last}
-                    </p>
+                    </h2>
                     <img
                         style={{ height: "200px", width: "200px" }}
                         src={this.state.profile_pic}
@@ -42,12 +47,13 @@ export default class OtherProfile extends React.Component {
                         className="profile-pic"
                     ></img>
                     <p>{this.state.bio}</p>
-                    {/* if not friend */}
                     <FriendButton otherId={this.props.match.params.id} />
                 </div>
-                {/* if friend */}
+
                 <div id="wall">
-                    <Wall id={this.props.match.params.id} />
+                    {this.state.friends && (
+                        <Wall id={this.props.match.params.id} />
+                    )}
                 </div>
             </div>
         );

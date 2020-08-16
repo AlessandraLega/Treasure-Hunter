@@ -40,7 +40,10 @@ export default class Bio extends React.Component {
                             name="bio"
                             onChange={(e) => this.handleChange(e)}
                             defaultValue={this.props.bio}
+                            rows="4"
+                            cols="28"
                         ></textarea>
+                        <br />
                         <button onClick={() => this.submit()}>
                             Change bio!
                         </button>
@@ -50,6 +53,7 @@ export default class Bio extends React.Component {
                     <>
                         {this.props.bio && (
                             <>
+                                <br />
                                 <h3 className="inline">Bio</h3>
                                 <img
                                     id="edit"

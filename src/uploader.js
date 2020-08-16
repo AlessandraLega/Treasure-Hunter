@@ -28,22 +28,17 @@ export default class Uploader extends React.Component {
     }
     render() {
         return (
-            <div
-                style={{
-                    position: "fixed",
-                    top: "30px",
-                    left: "30%",
-                    width: "40%",
-                    backgroundColor: "teal",
-                }}
-            >
-                <p>Upload your image!</p>
+            <div id="uploader">
+                <label htmlFor="file">Upload your image!</label>
                 <input
                     onChange={(e) => this.save(e)}
                     type="file"
                     name="file"
+                    id="file"
+                    className="input-file"
                     accept="image/*"
                 />
+                <br />
                 <button onClick={(e) => this.upload(e)}>submit</button>
             </div>
         );

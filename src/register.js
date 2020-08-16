@@ -80,6 +80,7 @@ export default class Register extends React.Component {
                     placeholder="password"
                     autoComplete="off"
                 />
+                <br></br>
                 <button id="submit" onClick={() => this.submit()}>
                     Sign up!
                 </button>

@@ -160,18 +160,20 @@ module.exports.addMessage = function (message, sender_id) {
     );
 };
 
-module.exports.getLastMessage = function () {
+module.exports.getLastMessage = function (id) {
     return db.query(
         `SELECT chat_messages.message, chat_messages.created_at, chat_messages.sender_id AS id, users.first, users.last, users.profile_pic FROM chat_messages LEFT JOIN users ON chat_messages.sender_id=users.id
+        WHERE sender_id=$1
         ORDER BY chat_messages.created_at DESC
-        LIMIT 1`
+        LIMIT 1`,
+        [id]
     );
 };
 
 module.exports.getAllPosts = function (id) {
     return db.query(
         `SELECT posts.post, posts.created_at, users.first, users.last, users.profile_pic FROM posts
-        LEFT JOIN users
+        JOIN users
         ON posts.sender_id = users.id
         WHERE wall_id = $1
         `,

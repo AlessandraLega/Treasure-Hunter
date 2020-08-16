@@ -26,6 +26,7 @@ export default function Wall({ id }) {
                 )
             );
         })();
+        document.querySelector("textarea").value = "";
     };
 
     /*     const convertDate = (date) => {
@@ -36,9 +37,16 @@ export default function Wall({ id }) {
     }; */
 
     return (
-        <div className="wall">
-            <textarea onChange={(e) => setNewPost(e.target.value)}></textarea>
-            <button onClick={() => savePost()}>Post</button>
+        <div id="wall">
+            <textarea
+                onChange={(e) => setNewPost(e.target.value)}
+                rows="2"
+                cols="45"
+                placeholder="write something nice for your friend!"
+            ></textarea>
+            <button onClick={() => savePost()} id="button-wall">
+                Post
+            </button>
             {posts &&
                 posts.map((post, i) => {
                     return (
@@ -52,7 +60,7 @@ export default function Wall({ id }) {
                                     className="sender-pic"
                                     src={post.profile_pic}
                                 />
-                                <p>{post.post}</p>
+                                <p className="message">{post.post}</p>
                             </div>
                         </div>
                     );

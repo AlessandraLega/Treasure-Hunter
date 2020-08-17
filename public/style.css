@@ -38,6 +38,10 @@ p {
     align-items: center;
 }
 
+#first-line {
+    margin-top: 20px;
+}
+
 nav {
     grid-column: 1/4;
     justify-self: end;
@@ -240,6 +244,7 @@ input {
     height: 30px;
     width: 30px;
     margin: 5px;
+    object-fit: cover;
 }
 
 .message {

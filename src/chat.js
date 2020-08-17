@@ -10,11 +10,6 @@ export default function Chat() {
         socket.emit("chatMessages");
     }, []);
 
-    useEffect(() => {
-        elemRef.current.scrollTop =
-            elemRef.current.scrollHeight - elemRef.current.clientHeight;
-    });
-
     const lastTen = useSelector((state) => {
         return (
             state.lastTen &&
@@ -23,6 +18,11 @@ export default function Chat() {
             )
         );
     });
+
+    useEffect(() => {
+        elemRef.current.scrollTop =
+            elemRef.current.scrollHeight - elemRef.current.clientHeight;
+    }, [lastTen]);
 
     const sendEmpty = (e) => {
         e.preventDefault();

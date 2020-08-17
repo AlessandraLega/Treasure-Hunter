@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Fragment, useEffect } from "react";
 import { getFriendsWannabes, accept, deleteFriend } from "./actions.js";
 import { Link } from "react-router-dom";
+import { socket } from "./socket";
 
 export default function Friends() {
     const dispatch = useDispatch();
@@ -31,6 +32,12 @@ export default function Friends() {
         return null;
     }
 
+    const acceptRequest = (userid) => {
+        dispatch(accept(userid));
+        socket.emit("acceptRequest");
+        console.log("what?");
+    };
+
     return (
         <>
             {!!wannabes.length && <h3>Friend requests</h3>}
@@ -38,7 +45,7 @@ export default function Friends() {
                 {wannabes &&
                     wannabes.map((user, i) => {
                         return (
-                            <div key={i}>
+                            <div className="friend-wannabe" key={i}>
                                 <img
                                     src={user.profile_pic}
                                     className="profile-pic"
@@ -52,7 +59,7 @@ export default function Friends() {
                                 </p>
                                 <button
                                     onClick={() => {
-                                        dispatch(accept(user.id));
+                                        acceptRequest(user.id);
                                     }}
                                 >
                                     Accept

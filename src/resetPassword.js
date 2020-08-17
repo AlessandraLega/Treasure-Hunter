@@ -51,9 +51,10 @@ export default class ResetPassword extends React.Component {
                 {this.state.step == 1 && (
                     <div>
                         <h3>Reset your password</h3>
+                        <p>Please enter your e-mail below.</p>
                         <p>
-                            Please enter your e-mail below. Please do not close
-                            this window, we will send you an email soon!
+                            Please do not close this window, we will send you an
+                            email soon!
                         </p>
                         {this.state.error && (
                             <p className="error">
@@ -68,7 +69,11 @@ export default class ResetPassword extends React.Component {
                             onChange={(e) => this.handleChange(e)}
                             placeholder="e-mail"
                         ></input>
-                        <button onClick={() => this.handleSendEmail()}>
+                        <br />
+                        <button
+                            id="submit"
+                            onClick={() => this.handleSendEmail()}
+                        >
                             Submit
                         </button>
                     </div>
@@ -91,6 +96,7 @@ export default class ResetPassword extends React.Component {
                             placeholder="secret code"
                             autoComplete="off"
                         ></input>
+                        <br />
                         <input
                             type="password"
                             name="newPassword"
@@ -98,7 +104,11 @@ export default class ResetPassword extends React.Component {
                             onChange={(e) => this.handleChange(e)}
                             placeholder="new password"
                         ></input>
-                        <button onClick={() => this.changePassword()}>
+                        <br />
+                        <button
+                            id="submit"
+                            onClick={() => this.changePassword()}
+                        >
                             Submit
                         </button>
                     </div>

@@ -43,3 +43,10 @@ export function newMessage(newMessage) {
         newMessage,
     };
 }
+
+export function newRequest(requestNum) {
+    return {
+        type: "NEW_REQUEST",
+        requestNum,
+    };
+}

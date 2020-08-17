@@ -31,6 +31,12 @@ export default function reducer(state = {}, action) {
             ...state,
             lastTen: [...state.lastTen, action.newMessage],
         };
+    } else if (action.type == "NEW_REQUEST") {
+        state = {
+            ...state,
+            requestNum: action.requestNum,
+        };
     }
+
     return state;
 }

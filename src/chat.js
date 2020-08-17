@@ -13,14 +13,6 @@ export default function Chat() {
     useEffect(() => {
         elemRef.current.scrollTop =
             elemRef.current.scrollHeight - elemRef.current.clientHeight;
-        console.log(
-            "elemRef.current.scrollHeight :",
-            elemRef.current.scrollHeight
-        );
-        console.log(
-            "elemRef.current.clientHeight :",
-            elemRef.current.clientHeight
-        );
     });
 
     const lastTen = useSelector((state) => {

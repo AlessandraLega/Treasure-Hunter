@@ -9,6 +9,8 @@ import OtherProfile from "./otherProfile";
 import FindPeople from "./findPeople";
 import Friends from "./friends";
 import Chat from "./chat";
+import { socket } from "./socket";
+import Nav from "./nav";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -20,6 +22,9 @@ export default class App extends React.Component {
         this.updateBio = this.updateBio.bind(this);
     }
     async componentDidMount() {
+        socket.on("requestNum", (num) => {
+            this.setState({ requests: num });
+        });
         await axios
             .get("/user")
             .then(({ data }) => {
@@ -31,13 +36,13 @@ export default class App extends React.Component {
                 console.log("error in get user: ", err);
             });
     }
+
     toggleModal() {
         this.setState({
             uploaderIsVisible: !this.state.uploaderIsVisible,
         });
     }
     updateImage(url) {
-        console.log("updateImage was fired!", url);
         this.setState({
             profile_pic: url,
         });
@@ -53,12 +58,16 @@ export default class App extends React.Component {
             <BrowserRouter>
                 <header>
                     <nav>
-                        <Link to={"/findPeople"}>
+                        <Nav />
+                        {/* <Link to={"/findPeople"}>
                             <span className="nav-link">find Friends</span>
                         </Link>
                         <span> | </span>
                         <Link to={"/friends"}>
                             <span className="nav-link">my Friends</span>
+                            {this.state.requests && (
+                                <span>({this.state.requests})</span>
+                            )}
                         </Link>
                         <span> | </span>
                         <Link to={"/"}>
@@ -71,7 +80,7 @@ export default class App extends React.Component {
                         <span> | </span>
                         <a id="logout" href="/logout">
                             Log out
-                        </a>
+                        </a>*/}
                     </nav>
                     <img src="/heart.png" alt="logo" id="logo" />
                     <h1 id="title">Compliments</h1>

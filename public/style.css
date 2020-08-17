@@ -1,6 +1,7 @@
 body {
     margin: 0;
     background-color: #f0efeb;
+    font-family: "Raleway", "Arial", sans-serif;
 }
 
 header {
@@ -68,6 +69,7 @@ h3 {
 #title {
     justify-self: center;
     align-self: center;
+    font-size: 50px;
 }
 
 #logo {
@@ -142,39 +144,7 @@ a:visited {
     margin: 5px;
 }
 
-/* .input-file {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-}
-
-label {
-    background-color: #cb997e;
-    border: 1px #aa795e solid;
-    color: #fff1e6;
-    border-radius: 15px;
-    padding: 5px 10px;
-}
-
-label:hover {
-    background-color: #f0cbb7;
-}
-
-label:active {
-    position: relative;
-    top: 1px;
-    border: none;
-    outline: 0;
-}
-
-label:focus {
-    outline: 0;
-} */
-
-/* buttons */
+/*buttons*/
 
 button {
     background-color: #cb997e;
@@ -207,6 +177,10 @@ button:focus {
     margin-left: 25px;
     position: relative;
     bottom: 13px;
+}
+
+#submit {
+    margin-top: 15px;
 }
 
 /*textarea*/

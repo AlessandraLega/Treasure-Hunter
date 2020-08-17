@@ -382,8 +382,13 @@ server.listen(8080, function () {
     console.log("I'm listening.");
 });
 
+let usersSockets = {};
+
 io.on("connection", (socket) => {
     const { id } = socket.request.session;
+
+    usersSockets.id = socket.id;
+
     if (!id) {
         return socket.disconnect();
     }
@@ -408,5 +413,39 @@ io.on("connection", (socket) => {
                     );
             })
             .catch((err) => console.log("error in addMessage: ", err));
+    });
+
+    socket.on("acceptRequest", () => {
+        db.getRequestNum(id)
+            .then((results) => {
+                return io.sockets.sockets[socket.id].emit(
+                    "requestNum",
+                    results.rows[0].count
+                );
+            })
+            .catch((err) => console.log("error in getRequestNum: ", err));
+    });
+
+    socket.on("sendRequest", (recipientId) => {
+        const recipientSocketId = usersSockets[recipientId];
+        db.getRequestNum(id)
+            .then((results) => {
+                return io.sockets.sockets[recipientSocketId].emit(
+                    "requestNum",
+                    results.rows[0].count
+                );
+            })
+            .catch((err) => console.log("error in getRequestNum: ", err));
+    });
+
+    socket.on("request", () => {
+        db.getRequestNum(id)
+            .then((results) => {
+                return io.sockets.sockets[socket.id].emit(
+                    "requestNum",
+                    results.rows[0].count
+                );
+            })
+            .catch((err) => console.log("error in getRequestNum: ", err));
     });
 });

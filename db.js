@@ -189,4 +189,14 @@ module.exports.addPost = function (sender_id, post, wall_id) {
     );
 };
 
+module.exports.getRequestNum = function (id) {
+    return db.query(
+        `SELECT COUNT(*)
+        FROM friendships
+        WHERE recipient_id=$1
+        AND accepted=false`,
+        [id]
+    );
+};
+
 //INSERT INTO posts (sender_id, post, wall_id) VALUES (68, 'you are great', 108);

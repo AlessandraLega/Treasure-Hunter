@@ -7,7 +7,6 @@ export default function Wall({ id }) {
 
     useEffect(() => {
         (async () => {
-            console.log("useEffect running!");
             const { data } = await axios.get("/all-posts/" + id);
             setPosts(
                 data.sort(
@@ -20,6 +19,7 @@ export default function Wall({ id }) {
     const savePost = () => {
         (async () => {
             const { data } = await axios.post("/new-post/", { newPost, id });
+            document.querySelector("textarea").value = "";
             setPosts(
                 data.sort(
                     (a, b) => new Date(b.created_at) - new Date(a.created_at)

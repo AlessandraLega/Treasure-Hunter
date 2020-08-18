@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+/* import React, { useState, useEffect } from "react";
 import axios from "./axios";
 
 export default function Wall({ id }) {
@@ -29,12 +29,6 @@ export default function Wall({ id }) {
         document.querySelector("textarea").value = "";
     };
 
-    /*     const convertDate = (date) => {
-        return new Intl.DateTimeFormat("de-DE", "default", {
-            hour: "numeric",
-            minute: "numeric",
-        }).format(date);
-    }; */
 
     return (
         <div id="wall">
@@ -68,3 +62,4 @@ export default function Wall({ id }) {
         </div>
     );
 }
+ */

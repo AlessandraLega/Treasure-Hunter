@@ -1,12 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-//import axios from "axios";
 import Welcome from "./welcome";
-//import Home from "./home";
 import App from "./app";
-/*add logic to determine what to pass to ReactDOM.render
-if the url is /welcome, render your Welcome component
-if the url is not /welcome, render your small logo*/
 
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
@@ -36,14 +31,3 @@ if (isLoggedIn) {
 }
 
 ReactDOM.render(elem, document.querySelector("main"));
-/* ReactDOM.render(
-    <HelloWorld />,
-    document.querySelector('main')
-);
-
-function HelloWorld() {
-    return (
-        <div>Hello, World!</div>
-    );
-}
- */

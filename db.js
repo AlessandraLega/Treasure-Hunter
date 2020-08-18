@@ -1,7 +1,7 @@
 var spicedPg = require("spiced-pg");
 var db = spicedPg(
     process.env.DATABASE_URL ||
-        "postgres:alessandra:postgres@localhost:5432/caper-socialnetwork"
+        "postgres:alessandra:postgres@localhost:5432/treasurehunter"
 );
 
 //sudo service postgresql start
@@ -52,6 +52,60 @@ module.exports.changePassword = function (email, newPassword) {
     return db.query(q, params);
 };
 
+module.exports.addItem = function (url, description, address, id) {
+    return db.query(
+        `INSERT INTO items (picture_url, description, address, user_id)
+                    VALUES ($1, $2, $3, $4) RETURNING id`,
+        [url, description, address, id]
+    );
+};
+
+module.exports.getLastItems = function () {
+    let q = `SELECT * FROM items
+            ORDER BY created_at DESC
+            LIMIT 10`;
+    return db.query(q);
+};
+
+module.exports.getSearch = function (search) {
+    return db.query(
+        `SELECT * FROM items
+            WHERE description
+            ILIKE $1
+            OR description
+            ILIKE $2
+            OR description
+            ILIKE $3`,
+        [search + "%", "%" + search, "%" + search + "%"]
+    );
+};
+
+module.exports.addSearch = function (search, id) {
+    return db.query(
+        `INSERT INTO saved_searches (search, user_id)
+        VALUES ($1, $2)`,
+        [search, id]
+    );
+};
+
+module.exports.getSaved = function (id) {
+    return db.query(
+        `SELECT DISTINCT search FROM saved_searches
+        WHERE user_id=$1`,
+        [id]
+    );
+};
+
+module.exports.removeFromSearch = function (item) {
+    return db.query(`DELETE FROM saved_searches WHERE search=$1`, [item]);
+};
+
+module.exports.getItem = function (id) {
+    return db.query(`SELECT * FROM items WHERE id=$1`, [id]);
+};
+
+//things I probably dont need
+
 module.exports.getAllInfo = function (id) {
     let q = `SELECT id, first, last, profile_pic, bio FROM users
             WHERE id = $1`;
@@ -92,7 +146,7 @@ module.exports.getLastUsers = function () {
     return db.query(q);
 };
 
-module.exports.getSearch = function (search) {
+/* module.exports.getSearch = function (search) {
     let q = `SELECT * FROM users
             WHERE first
             ILIKE $1
@@ -100,7 +154,7 @@ module.exports.getSearch = function (search) {
             ILIKE $1`;
     let params = [search + "%"];
     return db.query(q, params);
-};
+}; */
 
 module.exports.checkFriendship = function (otherId, myId) {
     let q = `SELECT * FROM friendships

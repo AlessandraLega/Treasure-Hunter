@@ -12,17 +12,17 @@ export default function Nav() {
 
     return (
         <nav>
-            <Link to={"/findPeople"}>
-                <span className="nav-link">find Friends</span>
+            <Link to={"/"}>
+                <span className="nav-link">find treasures</span>
             </Link>
             <span> | </span>
-            <Link to={"/friends"}>
-                <span className="nav-link">my Friends</span>
+            <Link to={"/saved-treasures"}>
+                <span className="nav-link">saved treasures</span>
                 {!!num && <span>({num})</span>}
             </Link>
             <span> | </span>
-            <Link to={"/"}>
-                <span className="nav-link">my Profile</span>
+            <Link to={"/my-searches"}>
+                <span className="nav-link">my searches</span>
             </Link>
             <span> | </span>
             <Link to={"/chat"}>

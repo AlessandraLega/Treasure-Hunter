@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 
 export default function profilePic({
     first,
@@ -19,3 +19,4 @@ export default function profilePic({
         ></img>
     );
 }
+ */

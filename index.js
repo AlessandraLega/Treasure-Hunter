@@ -200,15 +200,87 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     //     });
     // }
 
-    db.addImage(url, req.session.id)
+    db.addItem(url, req.body.description, req.body.address, req.session.id)
         .then((results) => {
             res.json(results.rows[0]);
         })
         .catch((err) => {
-            console.log("error in addImage: ", err);
+            console.log("error in addItem: ", err);
         });
 });
 
+app.get("/last-items", (req, res) => {
+    db.getLastItems()
+        .then((results) => {
+            res.json(results.rows);
+        })
+        .catch((err) => {
+            console.log("err in getLastItems: ", err);
+        });
+});
+
+app.get("/get-search/:search", (req, res) => {
+    db.getSearch(req.params.search)
+        .then((results) => {
+            res.json(results.rows);
+        })
+        .catch((err) => {
+            console.log("err in getSearch: ", err);
+        });
+});
+
+app.get("/get-item/:itemId", (req, res) => {
+    db.getItem(req.params.itemId)
+        .then((results) => {
+            res.json(results.rows[0]);
+        })
+        .catch((err) => {
+            console.log("err in getItem: ", err);
+        });
+});
+
+app.post("/save-search", (req, res) => {
+    db.addSearch(req.body.search, req.session.id)
+        .then(() => {
+            res.json({ success: true });
+        })
+        .catch((err) => {
+            console.log("error in addSearch:", err);
+            res.json({ success: false });
+        });
+});
+
+app.get("/saved-searches", (req, res) => {
+    db.getSaved(req.session.id)
+        .then((results) => {
+            res.json(results.rows);
+        })
+        .catch((err) => {
+            console.log("error in getSaved:", err);
+            res.json({ success: false });
+        });
+});
+
+app.post("/remove-from-search", (req, res) => {
+    console.log("hit server route");
+    db.removeFromSearch(req.body.item)
+        .then(() => {
+            db.getSaved(req.session.id)
+                .then((results) => {
+                    res.json(results.rows);
+                })
+                .catch((err) => {
+                    console.log("error in getSaved:", err);
+                    res.json({ success: false });
+                });
+        })
+        .catch((err) => {
+            console.log("error in removeFromSearch:", err);
+            res.json({ success: false });
+        });
+});
+
+///things I probably don't need!!!
 app.post("/bio", (req, res) => {
     db.addBio(req.body.bio, req.session.id)
         .then((results) => {
@@ -265,7 +337,7 @@ app.get("/friendship/:otherId", (req, res) => {
         });
 });
 
-app.get("/search/:search", (req, res) => {
+/* app.get("/search/:search", (req, res) => {
     db.getSearch(req.params.search)
         .then(({ rows }) => {
             res.json(rows);
@@ -273,7 +345,7 @@ app.get("/search/:search", (req, res) => {
         .catch((err) => {
             console.log("err in getSearch: ", err);
         });
-});
+}); */
 
 app.post("/update-friendship", (req, res) => {
     if (req.body.button == "ask friendship") {
@@ -328,11 +400,6 @@ app.get("/friends-wannabes", (req, res) => {
         });
 });
 
-app.get("/logout", (req, res) => {
-    req.session = null;
-    res.redirect("/login");
-});
-
 app.get("/all-posts/:id", (req, res) => {
     let id = req.params.id;
     db.getAllPosts(id)
@@ -369,6 +436,12 @@ app.post("/new-post", (req, res) => {
             res.json({ success: false });
         });
 });
+//// till here
+
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/login");
+});
 
 app.get("*", function (req, res) {
     if (!req.session.id) {
@@ -382,6 +455,7 @@ server.listen(8080, function () {
     console.log("I'm listening.");
 });
 
+//socket.io
 let usersSockets = {};
 
 io.on("connection", (socket) => {
@@ -393,7 +467,7 @@ io.on("connection", (socket) => {
         return socket.disconnect();
     }
 
-    socket.on("chatMessages", () => {
+    /* socket.on("chatMessages", () => {
         db.getLastTen()
             .then((results) => {
                 return io.emit("chatMessages", results.rows);
@@ -447,5 +521,5 @@ io.on("connection", (socket) => {
                 );
             })
             .catch((err) => console.log("error in getRequestNum: ", err));
-    });
+    }); */
 });

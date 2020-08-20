@@ -8,32 +8,29 @@ import { BrowserRouter, Route, Link } from "react-router-dom";
 import { socket } from "./socket";
 import Nav from "./nav";
 import SavedSearches from "./saved-searches";
+import Map from "./map";
+import SavedItems from "./saved-items";
 
-export default class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
+export default function App() {
+    return (
+        <BrowserRouter>
+            <header>
+                <nav>
+                    <Nav />
+                </nav>
+                <h1>Treasure Hunter</h1>
+                <Link to="/upload">
+                    <button>Upload treasure</button>
+                </Link>
+            </header>
 
-    render() {
-        return (
-            <BrowserRouter>
-                <header>
-                    <nav>
-                        <Nav />
-                    </nav>
-                    <h1>Treasure Hunter</h1>
-                    <Link to="/upload">
-                        <button>Upload treasure</button>
-                    </Link>
-                </header>
-
-                <Route exact path="/" component={Home} />
-                <Route path="/upload" component={Upload} />
-                <Route path="/item/:id" component={Item} />
-                <Route path="/my-searches" component={SavedSearches}></Route>
-                <Route path="/search/:search" component={Home} />
-            </BrowserRouter>
-        );
-    }
+            <Route exact path="/" component={Home} />
+            <Route path="/upload" component={Upload} />
+            <Route path="/item/:id" component={Item} />
+            <Route path="/my-searches" component={SavedSearches}></Route>
+            <Route path="/search/:search" component={Home} />
+            <Route path="/saved-treasures" component={SavedItems} />
+            <Route path="/map" component={Map} />
+        </BrowserRouter>
+    );
 }

@@ -280,6 +280,45 @@ app.post("/remove-from-search", (req, res) => {
         });
 });
 
+app.get("/is-it-fav/:itemId", (req, res) => {
+    const userId = req.session.id;
+    const itemId = req.params.itemId;
+    db.isItFav(userId, itemId)
+        .then(({ rows }) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("error in isItFav:", err);
+            res.json({ success: false });
+        });
+});
+
+app.post("/make-it-fav", (req, res) => {
+    const itemId = req.body.id;
+    const userId = req.session.id;
+    db.makeItFav(userId, itemId)
+        .then(() => {
+            res.json({ success: true });
+        })
+        .catch((err) => {
+            console.log("error in makeItFav:", err);
+            res.json({ success: false });
+        });
+});
+
+app.post("/delete-fav", (req, res) => {
+    const itemId = req.body.id;
+    const userId = req.session.id;
+    db.deleteFav(userId, itemId)
+        .then(() => {
+            res.json({ success: true });
+        })
+        .catch((err) => {
+            console.log("error in makeItFav:", err);
+            res.json({ success: false });
+        });
+});
+
 ///things I probably don't need!!!
 app.post("/bio", (req, res) => {
     db.addBio(req.body.bio, req.session.id)

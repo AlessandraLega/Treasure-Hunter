@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "./axios";
 import Results from "./results";
+import Map from "./map";
 
 export default function Home(props) {
     const item = props.match.params.search;
@@ -40,6 +41,7 @@ export default function Home(props) {
                 autoComplete="off"
                 onChange={handleChange}
             />
+            <Map />
             {!searchSaved && searching && (
                 <button onClick={saveSearch}>Save this search</button>
             )}

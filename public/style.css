@@ -56,6 +56,16 @@ nav {
     color: #f0efeb;
 }
 
+a:link {
+    text-decoration: none;
+    color: #cb997e;
+}
+
+a:visited {
+    text-decoration: none;
+    color: #cb997e;
+}
+
 #logout {
     height: 50px;
     width: 100vw;
@@ -76,138 +86,26 @@ h3 {
     font-size: 50px;
 }
 
-#logo {
-    width: 100px;
-    height: 100px;
-    margin: 10px;
+/* results */
+
+.result-item {
+    width: 500px;
+    height: 250px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
-.profile-pic {
-    border: 3px #cb997e solid;
-    background-color: #ebd1c2;
-    border-radius: 30%;
-    object-fit: cover;
-    margin: 10px;
+.circle {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: black;
 }
 
-.avatar {
-    height: 90px;
-    width: 90px;
-    justify-self: end;
+.fav {
+    fill: yellow;
 }
-
-.bigPic {
-    height: 200px;
-    width: 200px;
-}
-
-#edit {
-    height: 15px;
-    width: 15px;
-    display: blocks;
-    padding-left: 5px;
-}
-
-.inline {
-    display: inline;
-}
-
-.container {
-    padding: 20px;
-}
-
-.search-people {
-    padding: 10px;
-}
-
-a:link {
-    text-decoration: none;
-    color: #cb997e;
-}
-
-a:visited {
-    text-decoration: none;
-    color: #cb997e;
-}
-
-#uploader {
-    position: fixed;
-    top: 30px;
-    left: 30%;
-    width: 40%;
-    background-color: #fff1e6;
-    color: #83836f;
-    text-align: center;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.75);
-    padding: 15px;
-}
-
-.input-file {
-    border: none;
-    margin: 5px;
-}
-
-/*buttons*/
-
-button {
-    background-color: #cb997e;
-    border: 1px #aa795e solid;
-    color: #fff1e6;
-    border-radius: 15px;
-    padding: 5px 10px;
-}
-
-button:hover {
-    background-color: #f0cbb7;
-}
-
-button:active {
-    border: none;
-    outline: 0;
-}
-
-button:focus {
-    outline: 0;
-}
-
-#button-chat {
-    margin-left: 25px;
-    position: relative;
-    bottom: 35px;
-}
-
-#button-wall {
-    margin-left: 25px;
-    position: relative;
-    bottom: 13px;
-}
-
-#submit {
-    margin-top: 15px;
-}
-
-/*textarea*/
-
-textarea {
-    border: 1px #cb997e solid;
-    resize: none;
-    outline: none;
-    border-radius: 5px;
-}
-
-#textarea-button {
-    text-align: center;
-}
-
-/*input*/
-input {
-    border: 1px #cb997e solid;
-    outline: none;
-    border-radius: 5px;
-}
-
-/* chat + wall style */
+/* chat style */
 
 #chat {
     background-color: white;
@@ -228,7 +126,7 @@ input {
     color: #ca9274;
 }
 
-.date {
+.date-chat {
     color: #83836f;
     font-size: 10px;
 }
@@ -251,75 +149,3 @@ input {
     margin: 5px;
     color: #83836f;
 }
-
-/*profile*/
-
-#profile-container {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-}
-
-/* wall */
-
-#wall textarea {
-    margin-left: 10px;
-    margin-top: 80px;
-}
-
-.post-container {
-    background-color: #eddcd2;
-    margin: 10px;
-}
-
-/* find-people + friends*/
-
-#find-people-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.find-people {
-    text-align: center;
-    background-color: #fff1e6;
-    border-radius: 10px;
-    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-    margin: 20px;
-}
-
-#find-people-input {
-    text-align: center;
-}
-
-/* friends */
-
-.friends-wannabes-container {
-    display: flex;
-    justify-content: start;
-    flex-wrap: wrap;
-}
-
-.friend-wannabe {
-    text-align: center;
-    background-color: #fff1e6;
-    border-radius: 10px;
-    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-    margin-right: 20px;
-    padding: 10px;
-}
-
-/*
-cb997e scuro scritte
-eddcd2 background darker
-fff1e6 rosa chiaro 
-f0efeb background sfondo
-a5a58d grigio
-83836f grigio scuro
-
-/*
-606c38
-283618
-fefae0
-dda15e
-bc6c25
-*/

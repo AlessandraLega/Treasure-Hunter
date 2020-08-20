@@ -253,4 +253,31 @@ module.exports.getRequestNum = function (id) {
     );
 };
 
+module.exports.isItFav = function (userId, itemId) {
+    return db.query(
+        `SELECT * FROM favorites
+        WHERE user_id=$1
+        AND item_id=$2`,
+        [userId, itemId]
+    );
+};
+
+module.exports.makeItFav = function (userId, itemId) {
+    return db.query(
+        `INSERT INTO favorites (user_id, item_id)
+        VALUES ($1, $2)`,
+        [userId, itemId]
+    );
+};
+
+module.exports.deleteFav = function (userId, itemId) {
+    return db.query(
+        `DELETE FROM favorites
+        WHERE (user_id=$1)
+        AND (item_id=$2)`,
+        [userId, itemId]
+    );
+};
+
+// DELETE FROM favorites WHERE user_id=1 AND item_id=5;
 //INSERT INTO posts (sender_id, post, wall_id) VALUES (68, 'you are great', 108);

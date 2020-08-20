@@ -7,8 +7,19 @@ export default function Results({ search }) {
 
     useEffect(() => {
         (async () => {
-            if (search == "") {
+            if (location.pathname == "/saved-treasures") {
+                const favs = await axios.get("/get-favs");
+                /* console.log("data.length :", data.length);
+                let favs = [];
+                for (let i = 0; i < data.length; i++) {
+                    favs.push(data[i]["item_id"]);
+                    console.log('data[i]["item_id"] :', data[i]["item_id"]);
+                }*/
+                console.log("favs :", favs);
+                setResults(favs.data);
+            } else if (search == "") {
                 const lastItems = await axios.get("/last-items");
+                console.log("lastItems :", lastItems);
                 setResults(lastItems.data);
             } else {
                 const response = await axios.get("/get-search/" + search);
@@ -68,7 +79,14 @@ export default function Results({ search }) {
         if (elem.classList.contains("fav")) {
             axios.post("/delete-fav", { id }).then(({ data }) => {
                 if (data.success) {
-                    elem.classList.remove("fav");
+                    if (location.pathname == "/saved-treasures") {
+                        axios.get("/get-favs").then(({ data }) => {
+                            setResults(data);
+                        });
+                    } else {
+                        elem.classList.remove("fav");
+                    }
+                    // if i'm in fav >> setResults
                 } else {
                     console.log("error");
                 }
@@ -105,7 +123,8 @@ export default function Results({ search }) {
     return (
         <div>
             <h1>results</h1>
-            {!!results.length &&
+            {!!results &&
+                !!results.length &&
                 results.map((item, i) => {
                     return (
                         <Link to={`/item/${item.id}`} key={item.id}>

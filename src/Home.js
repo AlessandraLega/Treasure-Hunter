@@ -41,7 +41,7 @@ export default function Home(props) {
                 autoComplete="off"
                 onChange={handleChange}
             />
-            <Map />
+            {/* <Map /> */}
             {!searchSaved && searching && (
                 <button onClick={saveSearch}>Save this search</button>
             )}

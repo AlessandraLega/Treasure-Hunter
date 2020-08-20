@@ -319,6 +319,18 @@ app.post("/delete-fav", (req, res) => {
         });
 });
 
+app.get("/get-favs", (req, res) => {
+    const userId = req.session.id;
+    db.getFavs(userId)
+        .then(({ rows }) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("error in getFavs:", err);
+            res.json({ success: false });
+        });
+});
+
 ///things I probably don't need!!!
 app.post("/bio", (req, res) => {
     db.addBio(req.body.bio, req.session.id)

@@ -279,5 +279,12 @@ module.exports.deleteFav = function (userId, itemId) {
     );
 };
 
+module.exports.getFavs = function (userId) {
+    return db.query(
+        `SELECT * FROM favorites JOIN items ON favorites.item_id=items.id
+        WHERE favorites.user_id=$1`,
+        [userId]
+    );
+};
 // DELETE FROM favorites WHERE user_id=1 AND item_id=5;
 //INSERT INTO posts (sender_id, post, wall_id) VALUES (68, 'you are great', 108);

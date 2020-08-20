@@ -29,7 +29,7 @@ export default function App() {
             <Route path="/item/:id" component={Item} />
             <Route path="/my-searches" component={SavedSearches}></Route>
             <Route path="/search/:search" component={Home} />
-            <Route path="/saved-treasures" component={SavedItems} />
+            <Route path="/saved-treasures" component={Home} />
             <Route path="/map" component={Map} />
         </BrowserRouter>
     );

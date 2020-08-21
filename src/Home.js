@@ -16,6 +16,7 @@ export default function Home(props) {
     const [searchSaved, setSearchSaved] = useState(false);
     const [error, setError] = useState(false);
     const [searching, setSearching] = useState(false);
+    const [mapOpen, setMapOpen] = useState(false);
 
     const handleChange = (e) => {
         setSearchSaved(false);
@@ -32,6 +33,10 @@ export default function Home(props) {
             }
         });
     };
+
+    const toggleMap = () => {
+        setMapOpen(!mapOpen);
+    };
     return (
         <div id="main-container">
             <p>What treasure are you looking for?</p>
@@ -41,7 +46,7 @@ export default function Home(props) {
                 autoComplete="off"
                 onChange={handleChange}
             />
-            {/* <Map /> */}
+            {/*             <Map /> */}
             {!searchSaved && searching && (
                 <button onClick={saveSearch}>Save this search</button>
             )}
@@ -51,7 +56,10 @@ export default function Home(props) {
                 </p>
             )}
             {searchSaved && <p>Search succesfully saved</p>}
-            <Results search={search} />
+            {!mapOpen && <button onClick={toggleMap}>Map View</button>}
+            {!!mapOpen && <button onClick={toggleMap}>List View</button>}
+            {!mapOpen && <Results search={search} />}
+            {!!mapOpen && <Map />}
         </div>
     );
 }

@@ -52,11 +52,11 @@ module.exports.changePassword = function (email, newPassword) {
     return db.query(q, params);
 };
 
-module.exports.addItem = function (url, description, address, id) {
+module.exports.addItem = function (url, description, address, id, lat, lng) {
     return db.query(
-        `INSERT INTO items (picture_url, description, address, user_id)
-                    VALUES ($1, $2, $3, $4) RETURNING id`,
-        [url, description, address, id]
+        `INSERT INTO items (picture_url, description, address, user_id, lat, lng)
+                    VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+        [url, description, address, id, lat, lng]
     );
 };
 
@@ -102,6 +102,10 @@ module.exports.removeFromSearch = function (item) {
 
 module.exports.getItem = function (id) {
     return db.query(`SELECT * FROM items WHERE id=$1`, [id]);
+};
+
+module.exports.getAll = function () {
+    return db.query(`SELECT * FROM items`);
 };
 
 //things I probably dont need

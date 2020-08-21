@@ -9,7 +9,6 @@ import { socket } from "./socket";
 import Nav from "./nav";
 import SavedSearches from "./saved-searches";
 import Map from "./map";
-import SavedItems from "./saved-items";
 
 export default function App() {
     return (

@@ -200,7 +200,14 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     //     });
     // }
 
-    db.addItem(url, req.body.description, req.body.address, req.session.id)
+    db.addItem(
+        url,
+        req.body.description,
+        req.body.address,
+        req.session.id,
+        req.body.lat,
+        req.body.lng
+    )
         .then((results) => {
             res.json(results.rows[0]);
         })
@@ -217,6 +224,12 @@ app.get("/last-items", (req, res) => {
         .catch((err) => {
             console.log("err in getLastItems: ", err);
         });
+});
+
+app.get("/get-all", (req, res) => {
+    db.getAll().then(({ rows }) => {
+        res.json(rows);
+    });
 });
 
 app.get("/get-search/:search", (req, res) => {

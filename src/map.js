@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "./axios";
 import {
     GoogleMap,
     useLoadScript,
@@ -21,8 +22,6 @@ const center = {
     lng: 13.41274,
 };
 
-const secrets = require("../secrets");
-
 import mapStyles from "../mapstyles";
 
 const options = {
@@ -34,77 +33,21 @@ const options = {
 //const geocoder = new window.google.maps.Geocoder();
 
 export default function Map() {
-    const { isLoaded, loadError } = useLoadScript({
+    /* const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: secrets.REACT_APP_GOOGLE_MAPS_API_KEY,
-        //libraries,
-    });
-    const [markers, setMarkers] = useState([{ lat: 52.522331, lng: 13.41274 }]);
-    const [selected, setSelected] = React.useState(null);
+    }); */
+    const [markers, setMarkers] = useState([]);
+    const [selected, setSelected] = useState(null);
 
-    const onMapClick = React.useCallback((e) => {
-        setMarkers((current) => [
-            ...current,
-            {
-                lat: e.latLng.lat(),
-                lng: e.latLng.lng(),
-                time: new Date(),
-            },
-        ]);
+    useEffect(() => {
+        axios.get("/get-all").then(({ data }) => {
+            console.log("data fr :", data);
+            setMarkers(data);
+        });
     }, []);
 
-    if (loadError) return "Error";
-    if (!isLoaded) return "Loading...";
+    console.log("selected :", selected);
 
-    /*     const geocoder = new window.google.maps.Geocoder();
-    const getCoordinates = async (address) => {
-        let coordinates = await geocoder.geocode(
-            { address: address },
-            function (results, status) {
-                return results;
-            }
-        );
-        console.log(coordinates);
-    };
-
-    getCoordinates("Warthestrasse 8 Berlin"); */
-
-    /*   const translateAddress = async (address) => {
-        const geocode = await getGeocode(address);
-        console.log("geocode :", geocode);
-        return geocode;
-    };
-
-    translateAddress("Warthestrasse 8 berlin"); */
-    /* const geocodeAddress = (geocoder, resultsMap) => {
-        const address = document.getElementById("address").value;
-        geocoder.geocode({ address: address }, (results, status) => {
-            if (status === "OK") {
-                resultsMap.setCenter(results[0].geometry.location);
-                new window.google.maps.Marker({
-                    map: resultsMap,
-                    position: results[0].geometry.location,
-                }); 
-            } else {
-                alert(
-                    "Geocode was not successful for the following reason: " +
-                        status
-                );
-            }
-        });
-    }; */
-    const handleSelect = async (address) => {
-        // setValue(addr, false);
-        // clearSuggestions();
-        try {
-            const results = await getGeocode({ address });
-            const { lat, lng } = await getLatLng(results[0]);
-            console.log("lat,lng :", lat, lng);
-            console.log("results[0] :", results[0]);
-        } catch (err) {
-            console.log("error in handleSelect: ", err);
-        }
-    };
-    handleSelect("warthestrasse 8 berlin");
     return (
         <div>
             <GoogleMap
@@ -113,15 +56,47 @@ export default function Map() {
                 center={center}
                 mapStyles={mapStyles}
                 options={options}
-                onClick={onMapClick}
+                //  onClick={onMapClick}
             >
                 {markers &&
                     markers.map((marker, i) => (
                         <Marker
                             key={i}
-                            position={{ lat: marker.lat, lng: marker.lng }}
+                            position={{
+                                lat: Number(marker.lat),
+                                lng: Number(marker.lng),
+                            }}
+                            onClick={() => {
+                                setSelected(marker);
+                            }}
+                            /* icon={{
+                                url: `/bear.svg`,
+                                origin: new window.google.maps.Point(0, 0),
+                                anchor: new window.google.maps.Point(15, 15),
+                                scaledSize: new window.google.maps.Size(30, 30),
+                            }} */
                         />
                     ))}
+                {selected ? (
+                    <InfoWindow
+                        position={{
+                            lat: Number(selected.lat),
+                            lng: Number(selected.lng),
+                        }}
+                        onCloseClick={() => {
+                            setSelected(null);
+                        }}
+                    >
+                        <div>
+                            <img
+                                src={selected.picture_url}
+                                style={{ width: "150px", height: "150px" }}
+                            />
+                            <p>{selected.description}</p>
+                            <p>{selected.address}</p>
+                        </div>
+                    </InfoWindow>
+                ) : null}
             </GoogleMap>
         </div>
     );

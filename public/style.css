@@ -37,6 +37,10 @@
     font-weight: bold;
 }
 
+.new {
+    border: 1px yellow solid;
+}
+/*old stuff */
 body {
     margin: 0;
     background-color: #f0efeb;

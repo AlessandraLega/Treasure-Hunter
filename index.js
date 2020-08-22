@@ -344,10 +344,40 @@ app.get("/get-favs", (req, res) => {
         });
 });
 
-/* app.post("/reset-notifications", (req, res) => {
+app.post("/reset-notifications-search", (req, res) => {
     const userId = req.session.id;
-    db.resetNotifications(userId)
-} */
+    db.selectNotificationsSearch(userId).then(({ rows }) => {
+        let toHighligh = rows;
+        db.resetNotificationsSearch(userId)
+            .then(() => {
+                res.json(toHighligh);
+            })
+            .catch((err) => {
+                console.log("error in resetNotificationsSearch:", err);
+                res.json({ success: false });
+            });
+    });
+});
+
+app.post("/reset-notifications-fav", (req, res) => {
+    const userId = req.session.id;
+    db.selectNotificationsFav(userId)
+        .then(({ rows }) => {
+            let toHighligh = rows;
+            db.resetNotificationsFav(userId)
+                .then(() => {
+                    res.json(toHighligh);
+                })
+                .catch((err) => {
+                    console.log("error in setReadToTrueFav:", err);
+                    res.json({ success: false });
+                });
+        })
+        .catch((err) => {
+            console.log("error in resetNotificationsFav:", err);
+            res.json({ success: false });
+        });
+});
 
 ///things I probably don't need!!!
 app.post("/bio", (req, res) => {
@@ -469,43 +499,44 @@ app.get("/friends-wannabes", (req, res) => {
         });
 });
 
-app.get("/all-posts/:id", (req, res) => {
+//// till here
+
+app.get("/all-comments/:id", (req, res) => {
     let id = req.params.id;
-    db.getAllPosts(id)
+    db.getAllComments(id)
         .then((results) => {
             if (results.rows.length) {
                 res.json(results.rows);
             } else {
-                console.log("no friends!");
+                console.log("no comments!");
                 res.json({ success: false });
             }
         })
         .catch((err) => {
-            console.log("error in getAllPost: ", err);
+            console.log("error in getAllComments: ", err);
             res.json({ success: false });
         });
 });
 
-app.post("/new-post", (req, res) => {
+app.post("/new-comment", (req, res) => {
     const sender_id = req.session.id;
-    const { newPost, id } = req.body;
-    db.addPost(sender_id, newPost, id)
+    const { newComment, id } = req.body;
+    db.addComment(sender_id, newComment, id)
         .then(() => {
-            db.getAllPosts(id)
+            db.getAllComments(id)
                 .then((results) => {
                     res.json(results.rows);
                 })
                 .catch((err) => {
-                    console.log("error in getAllPost: ", err);
+                    console.log("error in getAllComments: ", err);
                     res.json({ success: false });
                 });
         })
         .catch((err) => {
-            console.log("error in addPost: ", err);
+            console.log("error in addComments: ", err);
             res.json({ success: false });
         });
 });
-//// till here
 
 app.get("/logout", (req, res) => {
     req.session = null;
@@ -536,18 +567,32 @@ io.on("connection", (socket) => {
         return socket.disconnect();
     }
 
-    ///code for search
+    ///code for notifications
 
-    socket.on("request", () => {
-        db.getNotificationNum(id)
+    socket.on("requestSearch", () => {
+        db.getNotificationNumSearch(id)
             .then((results) => {
-                console.log("results.rows[0].count :", results.rows[0].count);
                 return io.sockets.sockets[socket.id].emit(
-                    "requestNum",
+                    "requestNumSearch",
                     results.rows[0].count
                 );
             })
-            .catch((err) => console.log("error in getRequestNum: ", err));
+            .catch((err) =>
+                console.log("error in getNotificationNumSearch: ", err)
+            );
+    });
+
+    socket.on("requestFav", () => {
+        db.getNotificationNumFav(id)
+            .then((results) => {
+                return io.sockets.sockets[socket.id].emit(
+                    "requestNumFav",
+                    results.rows[0].count
+                );
+            })
+            .catch((err) =>
+                console.log("error in getNotificationNumFav: ", err)
+            );
     });
 
     socket.on("newItem", (data) => {
@@ -559,19 +604,14 @@ io.on("connection", (socket) => {
             db.checkSearches(word)
                 .then(({ rows }) => {
                     if (rows.length) {
-                        db.addNotification(
+                        db.addNotificationSearch(
                             rows[0].user_id,
                             rows[0].search,
                             newItemId
                         )
                             .then(({ rows }) => {
                                 let userId = rows[0]["user_id"];
-                                console.log(
-                                    'rows[0]["search"] :',
-                                    rows[0]["search"]
-                                );
                                 const recipientSocketId = usersSockets[userId];
-
                                 console.log("usersSockets :", usersSockets);
                                 console.log(
                                     "recipientSocketId :",
@@ -579,10 +619,13 @@ io.on("connection", (socket) => {
                                 );
                                 return io.sockets.sockets[
                                     recipientSocketId
-                                ].emit("notification", rows[0].search);
+                                ].emit("notificationSearch", rows[0].search);
                             })
                             .catch((err) => {
-                                console.log("error in addNotifications: ", err);
+                                console.log(
+                                    "error in addNotificationsSearch: ",
+                                    err
+                                );
                             });
                     }
                 })
@@ -592,9 +635,39 @@ io.on("connection", (socket) => {
         });
     });
 
-    /*  */
+    socket.on("newComment", (data) => {
+        const { itemId } = data;
+        db.checkFav(itemId)
+            .then(({ rows }) => {
+                if (rows.length) {
+                    db.addNotificationFav(rows[0].user_id, itemId)
+                        .then(({ rows }) => {
+                            let userId = rows[0]["user_id"];
+                            const recipientSocketId = usersSockets[userId];
+                            console.log("usersSockets :", usersSockets);
+                            console.log(
+                                "recipientSocketId :",
+                                recipientSocketId
+                            );
+                            return io.sockets.sockets[recipientSocketId].emit(
+                                "notificationFav",
+                                rows[0].item_id
+                            );
+                        })
+                        .catch((err) => {
+                            console.log("error in addNotificationsFav: ", err);
+                        });
+                }
+            })
+            .catch((err) => {
+                console.log("error in checkFav: ", err);
+            });
+    });
+});
 
-    /* socket.on("chatMessages", () => {
+/*  */
+
+/* socket.on("chatMessages", () => {
         db.getLastTen()
             .then((results) => {
                 return io.emit("chatMessages", results.rows);
@@ -649,4 +722,3 @@ io.on("connection", (socket) => {
             })
             .catch((err) => console.log("error in getRequestNum: ", err));
     }); */
-});

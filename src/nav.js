@@ -1,36 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import * as io from "socket.io-client";
+import { socket } from "./app";
 import axios from "./axios";
 
 export default function Nav() {
-    const [notification, setNotification] = useState(0);
+    const [notificationSearch, setNotificationSearch] = useState(0);
+    const [notificationFav, setNotificationFav] = useState(0);
+
     useEffect(() => {
         console.log("useEffect running");
-        let socket;
 
-        if (!socket) {
-            socket = io.connect();
-        }
+        socket.emit("requestSearch");
+        socket.emit("requestFav");
 
-        socket.emit("request");
-
-        socket.on("requestNum", (notificationNum) => {
-            console.log("notificationNum :", notificationNum);
-            setNotification(notificationNum);
+        socket.on("requestNumSearch", (notificationNum) => {
+            console.log("notificationNum search:", notificationNum);
+            setNotificationSearch(notificationNum);
         });
 
-        socket.on("notification", (data) => {
-            console.log("received notification :", data);
-            setNotification(notification + 1);
+        socket.on("requestNumFav", (notificationNum) => {
+            console.log("notificationNum fav:", notificationNum);
+            setNotificationFav(notificationNum);
         });
 
-        return socket.off("notification");
+        socket.on("notificationSearch", (data) => {
+            console.log("received notificationSearch :", data);
+            setNotificationSearch(notificationSearch + 1);
+        });
+        socket.on("notificationFav", (data) => {
+            console.log("received notificationFav :", data);
+            setNotificationSearch(notificationFav + 1);
+        });
+
+        const cleanup = () => {
+            socket.off("notificationSearch");
+            socket.off("notificationFav");
+        };
+
+        return cleanup();
     }, []);
 
-    const resetNotifications = () => {
-        setNotification(0);
-        axios.post("/reset-notifications");
+    const resetNotificationsSearch = () => {
+        setNotificationSearch(0);
+    };
+
+    const resetNotificationsFav = () => {
+        setNotificationFav(0);
     };
 
     return (
@@ -39,13 +54,14 @@ export default function Nav() {
                 <span className="nav-link">find treasures</span>
             </Link>
             <span> | </span>
-            <Link to={"/saved-treasures"}>
+            <Link to={"/saved-treasures"} onClick={resetNotificationsFav}>
                 <span className="nav-link">saved treasures</span>
-                {<span>({notification})</span>}
+                {<span>({notificationFav})</span>}
             </Link>
             <span> | </span>
-            <Link to={"/my-searches"} onClick={resetNotifications}>
+            <Link to={"/my-searches"} onClick={resetNotificationsSearch}>
                 <span className="nav-link">my searches</span>
+                {<span>({notificationSearch})</span>}
             </Link>
             <span> | </span>
             <Link to={"/chat"}>

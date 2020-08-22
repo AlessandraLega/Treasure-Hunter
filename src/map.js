@@ -6,11 +6,7 @@ import {
     Marker,
     InfoWindow,
 } from "@react-google-maps/api";
-
-import usePlacesAutocomplete, {
-    getGeocode,
-    getLatLng,
-} from "use-places-autocomplete";
+import { Link } from "react-router-dom";
 
 //const libraries = "places";
 const mapContainerStyle = {
@@ -87,14 +83,16 @@ export default function Map() {
                             setSelected(null);
                         }}
                     >
-                        <div>
-                            <img
-                                src={selected.picture_url}
-                                style={{ width: "150px", height: "150px" }}
-                            />
-                            <p>{selected.description}</p>
-                            <p>{selected.address}</p>
-                        </div>
+                        <Link to={`/item/${selected.id}`} key={selected.id}>
+                            <div>
+                                <img
+                                    src={selected.picture_url}
+                                    style={{ width: "150px", height: "150px" }}
+                                />
+                                <p>{selected.description}</p>
+                                <p>{selected.address}</p>
+                            </div>
+                        </Link>
                     </InfoWindow>
                 ) : null}
             </GoogleMap>

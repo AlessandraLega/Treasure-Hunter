@@ -9,14 +9,16 @@ export default function Results({ search }) {
         (async () => {
             if (location.pathname == "/saved-treasures") {
                 const favs = await axios.get("/get-favs");
-                /* console.log("data.length :", data.length);
-                let favs = [];
-                for (let i = 0; i < data.length; i++) {
-                    favs.push(data[i]["item_id"]);
-                    console.log('data[i]["item_id"] :', data[i]["item_id"]);
-                }*/
-                console.log("favs :", favs);
                 setResults(favs.data);
+                axios.post("/reset-notifications-fav").then(({ data }) => {
+                    console.log("data :", data);
+                    for (let i = 0; i < data.length; i++) {
+                        console.log("data[i].item_id :", data[i].item_id);
+                        document
+                            .getElementById(`div-${data[i].item_id}`)
+                            .classList.add("new");
+                    }
+                });
             } else if (search == "") {
                 const lastItems = await axios.get("/last-items");
                 console.log("lastItems :", lastItems);
@@ -128,7 +130,7 @@ export default function Results({ search }) {
                 results.map((item, i) => {
                     return (
                         <Link to={`/item/${item.id}`} key={item.id}>
-                            <div className="result-item">
+                            <div className="result-item" id={`div-${item.id}`}>
                                 <img
                                     src={item.picture_url}
                                     style={{ height: 150, width: 150 }}

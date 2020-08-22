@@ -93,7 +93,7 @@ export default function Upload() {
                     newItemId: data.id,
                     description: data.description,
                 });
-                //location.href = "/";
+                location.href = "/";
             })
             .catch(function (err) {
                 console.log("error in post /upload: ", err);

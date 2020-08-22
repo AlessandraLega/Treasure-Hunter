@@ -1,15 +1,18 @@
 import React from "react";
-import axios from "./axios";
-// import Profile from "./profile";
 import Home from "./home";
 import Upload from "./upload";
 import Item from "./item";
 import { BrowserRouter, Route, Link } from "react-router-dom";
-import { socket } from "./socket";
 import Nav from "./nav";
 import SavedSearches from "./saved-searches";
 import Map from "./map";
+import * as io from "socket.io-client";
 
+export let socket;
+
+if (!socket) {
+    socket = io.connect();
+}
 export default function App() {
     return (
         <BrowserRouter>

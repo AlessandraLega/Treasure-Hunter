@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS notifications;
+DROP TABLE IF EXISTS notifications_search;
 
-CREATE TABLE notifications( 
+CREATE TABLE notifications_search( 
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(id),
     search VARCHAR NOT NULL,

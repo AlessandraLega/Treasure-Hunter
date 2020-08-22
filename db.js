@@ -124,27 +124,90 @@ module.exports.checkSearches = function (description) {
     );
 };
 
-module.exports.addNotification = function (userId, search, itemId) {
+module.exports.addNotificationSearch = function (userId, search, itemId) {
     return db.query(
-        `INSERT INTO notifications (user_id, search, item_id)
+        `INSERT INTO notifications_search (user_id, search, item_id)
         VALUES ($1, $2, $3)
         RETURNING user_id, search`,
         [userId, search, itemId]
     );
 };
 
-module.exports.getNotificationNum = function (userId) {
+module.exports.getNotificationNumSearch = function (userId) {
     return db.query(
-        `SELECT COUNT (*) FROM notifications 
+        `SELECT COUNT (*) FROM notifications_search 
         WHERE user_id=$1`,
         [userId]
     );
 };
 
-/* module.exports.resetNotifications = function (userId) {
-    return db.query(`DELETE`);
+module.exports.selectNotificationsSearch = function (userId) {
+    return db.query(
+        `SELECT search FROM notifications_search WHERE user_id=$1`,
+        [userId]
+    );
 };
- */
+
+module.exports.resetNotificationsSearch = function (userId) {
+    return db.query(`DELETE FROM notifications_search WHERE user_id=$1`, [
+        userId,
+    ]);
+};
+
+module.exports.getAllComments = function (id) {
+    return db.query(
+        `SELECT comments.comment, comments.created_at, users.first, users.last, users.profile_pic FROM comments
+        JOIN users
+        ON comments.sender_id = users.id
+        WHERE item_id = $1
+        `,
+        [id]
+    );
+};
+
+module.exports.addComment = function (sender_id, comment, item_id) {
+    return db.query(
+        `INSERT INTO comments (sender_id, comment, item_id)
+        VALUES ($1, $2, $3)`,
+        [sender_id, comment, item_id]
+    );
+};
+
+module.exports.checkFav = function (itemId) {
+    return db.query(
+        `SELECT user_id FROM favorites
+        WHERE item_id = $1`,
+        [itemId]
+    );
+};
+
+module.exports.addNotificationFav = function (userId, itemId) {
+    return db.query(
+        `INSERT INTO notifications_fav (user_id, item_id)
+        VALUES ($1, $2)
+        RETURNING user_id, item_id`,
+        [userId, itemId]
+    );
+};
+
+module.exports.getNotificationNumFav = function (userId) {
+    return db.query(
+        `SELECT COUNT (*) FROM notifications_fav 
+        WHERE user_id=$1`,
+        [userId]
+    );
+};
+
+module.exports.selectNotificationsFav = function (userId) {
+    return db.query(`SELECT item_id FROM notifications_fav WHERE user_id=$1`, [
+        userId,
+    ]);
+};
+
+module.exports.resetNotificationsFav = function (userId) {
+    return db.query(`DELETE FROM notifications_fav WHERE user_id=$1`, [userId]);
+};
+
 //things I probably dont need
 
 module.exports.getAllInfo = function (id) {
@@ -262,25 +325,6 @@ module.exports.getLastMessage = function (id) {
         ORDER BY chat_messages.created_at DESC
         LIMIT 1`,
         [id]
-    );
-};
-
-module.exports.getAllPosts = function (id) {
-    return db.query(
-        `SELECT posts.post, posts.created_at, users.first, users.last, users.profile_pic FROM posts
-        JOIN users
-        ON posts.sender_id = users.id
-        WHERE wall_id = $1
-        `,
-        [id]
-    );
-};
-
-module.exports.addPost = function (sender_id, post, wall_id) {
-    return db.query(
-        `INSERT INTO posts (sender_id, post, wall_id)
-        VALUES ($1, $2, $3)`,
-        [sender_id, post, wall_id]
     );
 };
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "./axios";
+import Comments from "./comments";
 
 export default function Item(props) {
     const itemId = props.match.params.id;
@@ -21,6 +22,7 @@ export default function Item(props) {
             ></img>
             <p>{item.description}</p>
             <p>{item.address}</p>
+            <Comments id={item.id} />
         </div>
     );
 }

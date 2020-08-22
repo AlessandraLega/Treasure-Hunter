@@ -55,7 +55,7 @@ module.exports.changePassword = function (email, newPassword) {
 module.exports.addItem = function (url, description, address, id, lat, lng) {
     return db.query(
         `INSERT INTO items (picture_url, description, address, user_id, lat, lng)
-                    VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+                    VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, description`,
         [url, description, address, id, lat, lng]
     );
 };
@@ -108,6 +108,43 @@ module.exports.getAll = function () {
     return db.query(`SELECT * FROM items`);
 };
 
+module.exports.checkSearches = function (description) {
+    return db.query(
+        `SELECT user_id, search FROM saved_searches
+        WHERE search = $1 
+        OR search = $2 
+        OR search = $3
+        OR search = $4`,
+        [
+            description + "%",
+            "%" + description,
+            "%" + description + "%",
+            description,
+        ]
+    );
+};
+
+module.exports.addNotification = function (userId, search, itemId) {
+    return db.query(
+        `INSERT INTO notifications (user_id, search, item_id)
+        VALUES ($1, $2, $3)
+        RETURNING user_id, search`,
+        [userId, search, itemId]
+    );
+};
+
+module.exports.getNotificationNum = function (userId) {
+    return db.query(
+        `SELECT COUNT (*) FROM notifications 
+        WHERE user_id=$1`,
+        [userId]
+    );
+};
+
+/* module.exports.resetNotifications = function (userId) {
+    return db.query(`DELETE`);
+};
+ */
 //things I probably dont need
 
 module.exports.getAllInfo = function (id) {

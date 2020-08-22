@@ -5,6 +5,7 @@ import usePlacesAutocomplete, {
     getLatLng,
 } from "use-places-autocomplete";
 const secrets = require("../secrets");
+import { socket } from "./socket";
 
 import {
     Combobox,
@@ -48,10 +49,11 @@ export default function Upload() {
                 lng: () => 13.41274,
             },
             radius: 100 * 1000,
+            debounce: 300,
         },
     });
 
-    const convertAddress = async (address) => {
+    /* const convertAddress = async (address) => {
         try {
             const results = await getGeocode({ address });
             const { lat, lng } = await getLatLng(results[0]);
@@ -68,7 +70,7 @@ export default function Upload() {
         } catch (err) {
             console.log("error in convertAddress: ", err);
         }
-    };
+    }; */
 
     const upload = async (e) => {
         e.preventDefault();
@@ -86,8 +88,12 @@ export default function Upload() {
 
         axios
             .post("/upload", formData)
-            .then(function () {
-                location.href = "/";
+            .then(function ({ data }) {
+                socket.emit("newItem", {
+                    newItemId: data.id,
+                    description: data.description,
+                });
+                //location.href = "/";
             })
             .catch(function (err) {
                 console.log("error in post /upload: ", err);
@@ -96,12 +102,10 @@ export default function Upload() {
 
     const handleSelect = (address) => {
         setValue(address, false);
-        console.log("address :", address);
         setInput({
             ...input,
             address: address,
         });
-        console.log("input :", input);
         clearSuggestions();
     };
     return (

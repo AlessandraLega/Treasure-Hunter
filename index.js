@@ -344,6 +344,11 @@ app.get("/get-favs", (req, res) => {
         });
 });
 
+/* app.post("/reset-notifications", (req, res) => {
+    const userId = req.session.id;
+    db.resetNotifications(userId)
+} */
+
 ///things I probably don't need!!!
 app.post("/bio", (req, res) => {
     db.addBio(req.body.bio, req.session.id)
@@ -525,11 +530,69 @@ let usersSockets = {};
 io.on("connection", (socket) => {
     const { id } = socket.request.session;
 
-    usersSockets.id = socket.id;
+    usersSockets[id] = socket.id;
 
     if (!id) {
         return socket.disconnect();
     }
+
+    ///code for search
+
+    socket.on("request", () => {
+        db.getNotificationNum(id)
+            .then((results) => {
+                console.log("results.rows[0].count :", results.rows[0].count);
+                return io.sockets.sockets[socket.id].emit(
+                    "requestNum",
+                    results.rows[0].count
+                );
+            })
+            .catch((err) => console.log("error in getRequestNum: ", err));
+    });
+
+    socket.on("newItem", (data) => {
+        const { newItemId, description } = data;
+
+        let stringArray = description.split(" ");
+
+        stringArray.map((word) => {
+            db.checkSearches(word)
+                .then(({ rows }) => {
+                    if (rows.length) {
+                        db.addNotification(
+                            rows[0].user_id,
+                            rows[0].search,
+                            newItemId
+                        )
+                            .then(({ rows }) => {
+                                let userId = rows[0]["user_id"];
+                                console.log(
+                                    'rows[0]["search"] :',
+                                    rows[0]["search"]
+                                );
+                                const recipientSocketId = usersSockets[userId];
+
+                                console.log("usersSockets :", usersSockets);
+                                console.log(
+                                    "recipientSocketId :",
+                                    recipientSocketId
+                                );
+                                return io.sockets.sockets[
+                                    recipientSocketId
+                                ].emit("notification", rows[0].search);
+                            })
+                            .catch((err) => {
+                                console.log("error in addNotifications: ", err);
+                            });
+                    }
+                })
+                .catch((err) => {
+                    console.log("error in checkSearches: ", err);
+                });
+        });
+    });
+
+    /*  */
 
     /* socket.on("chatMessages", () => {
         db.getLastTen()

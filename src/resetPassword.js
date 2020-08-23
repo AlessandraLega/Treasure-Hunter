@@ -47,7 +47,7 @@ export default class ResetPassword extends React.Component {
     }
     render() {
         return (
-            <div>
+            <>
                 {this.state.step == 1 && (
                     <div>
                         <h3>Reset your password</h3>
@@ -61,21 +61,23 @@ export default class ResetPassword extends React.Component {
                                 Something went wrong, please try again!
                             </p>
                         )}
-                        <p>E-mail:</p>
-                        <input
-                            type="text"
-                            name="email"
-                            id="email"
-                            onChange={(e) => this.handleChange(e)}
-                            placeholder="e-mail"
-                        ></input>
-                        <br />
-                        <button
-                            id="submit"
-                            onClick={() => this.handleSendEmail()}
-                        >
-                            Submit
-                        </button>
+                        <div className="form">
+                            <p>E-mail:</p>
+                            <input
+                                type="text"
+                                name="email"
+                                id="email"
+                                onChange={(e) => this.handleChange(e)}
+                                placeholder="e-mail"
+                            ></input>
+                            <br />
+                            <button
+                                id="submit"
+                                onClick={() => this.handleSendEmail()}
+                            >
+                                Submit
+                            </button>
+                        </div>
                     </div>
                 )}
                 {this.state.step == 2 && (
@@ -121,7 +123,7 @@ export default class ResetPassword extends React.Component {
                         </p>
                     </div>
                 )}
-            </div>
+            </>
         );
     }
 }

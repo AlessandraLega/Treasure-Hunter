@@ -56,12 +56,12 @@ export default function Nav() {
             <span> | </span>
             <Link to={"/saved-treasures"} onClick={resetNotificationsFav}>
                 <span className="nav-link">saved treasures</span>
-                {<span>({notificationFav})</span>}
+                {!!notificationFav && <span>({notificationFav})</span>}
             </Link>
             <span> | </span>
             <Link to={"/my-searches"} onClick={resetNotificationsSearch}>
                 <span className="nav-link">my searches</span>
-                {<span>({notificationSearch})</span>}
+                {!!notificationSearch && <span>({notificationSearch})</span>}
             </Link>
             <span> | </span>
             <Link to={"/chat"}>

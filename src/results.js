@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 
 export default function Results({ search }) {
     const [results, setResults] = useState([]);
+    const [fav, setFav] = useState(false);
 
     useEffect(() => {
         (async () => {
             if (location.pathname == "/saved-treasures") {
+                setFav(true);
                 const favs = await axios.get("/get-favs");
                 setResults(favs.data);
                 axios.post("/reset-notifications-fav").then(({ data }) => {
@@ -67,11 +69,11 @@ export default function Results({ search }) {
         let timeElapsed = now - timestamp;
 
         if (timeElapsed < twoHours) {
-            return { backgroundColor: "green" };
+            return { backgroundColor: "green", color: "green" };
         } else if (timeElapsed < sixHours) {
-            return { backgroundColor: "yellow" };
+            return { backgroundColor: "yellow", color: "yellow" };
         } else {
-            return { backgroundColor: "red" };
+            return { backgroundColor: "red", color: "red" };
         }
     };
 
@@ -113,18 +115,13 @@ export default function Results({ search }) {
             } else {
                 return;
             }
-            /* for (let i; i < data.length; i++) {
-                if (data[i].item_id == itemId) {
-                    let elem = document.getElementById(`${itemId}`);
-                    elem.classList.add("fav");
-                }
-            } */
         });
     };
 
     return (
         <div>
-            <h1>results</h1>
+            {!fav && <h2>Results</h2>}
+            {!!fav && <h2>Saved treasures</h2>}
             {!!results &&
                 !!results.length &&
                 results.map((item, i) => {
@@ -132,37 +129,39 @@ export default function Results({ search }) {
                         <Link to={`/item/${item.id}`} key={item.id}>
                             <div className="result-item" id={`div-${item.id}`}>
                                 <img
+                                    className="small-pic"
                                     src={item.picture_url}
-                                    style={{ height: 150, width: 150 }}
                                 ></img>
                                 <div className="item-content">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        onClick={(e) => {
-                                            toggleFav(e, item.id);
-                                        }}
-                                        //className={isItFav(item.id)}
-                                    >
-                                        <path
-                                            id={item.id}
-                                            className={isItFav(item.id)}
-                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                                        />
-                                    </svg>
-                                    <p className="description">
-                                        {item.description}
-                                    </p>
+                                    <div className="description-star">
+                                        <p className="description">
+                                            {item.description}
+                                        </p>
+                                        <svg
+                                            className="star"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            onClick={(e) => {
+                                                toggleFav(e, item.id);
+                                            }}
+                                        >
+                                            <path
+                                                id={item.id}
+                                                className={isItFav(item.id)}
+                                                d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
+                                            />
+                                        </svg>
+                                    </div>
                                     <p className="address">{item.address}</p>
+                                    <p className="time">
+                                        {convertTime(item.created_at)}
+                                    </p>
                                     <div
                                         className="circle"
                                         style={setColor(item.created_at)}
                                     ></div>
-                                    <p className="time">
-                                        {convertTime(item.created_at)}
-                                    </p>
                                 </div>
                             </div>
                         </Link>

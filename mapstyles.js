@@ -13,7 +13,7 @@ export default [
         elementType: "geometry.stroke",
         stylers: [
             {
-                color: "#9c9c9c",
+                color: "#f58549",
             },
         ],
     },
@@ -31,7 +31,7 @@ export default [
         elementType: "all",
         stylers: [
             {
-                color: "#f2f2f2",
+                color: "#f2a65a",
             },
         ],
     },
@@ -79,7 +79,7 @@ export default [
         elementType: "geometry.fill",
         stylers: [
             {
-                color: "#eeeeee",
+                color: "#eec170",
             },
         ],
     },
@@ -88,7 +88,7 @@ export default [
         elementType: "labels.text.fill",
         stylers: [
             {
-                color: "#7b7b7b",
+                color: "#772f1a",
             },
         ],
     },
@@ -97,7 +97,7 @@ export default [
         elementType: "labels.text.stroke",
         stylers: [
             {
-                color: "#ffffff",
+                color: "#772f1a",
             },
         ],
     },

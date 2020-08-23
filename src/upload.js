@@ -109,8 +109,8 @@ export default function Upload() {
         clearSuggestions();
     };
     return (
-        <div>
-            <h1>Upload a treasure</h1>
+        <div id="upload-container">
+            <h2>Upload a treasure</h2>
             <p>picture:</p>
             <input onChange={save} type="file" name="file" accept="image/*" />
             <p>description:</p>

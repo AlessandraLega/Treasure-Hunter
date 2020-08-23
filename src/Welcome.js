@@ -10,19 +10,19 @@ export default function Welcome() {
             <div id="welcome">
                 <div id="welcome-text">
                     <p id="first-line">welcome to</p>
-                    <h1>Compliment</h1>
+                    <h1>Treasure Hunter</h1>
                     <p>
-                        The world would be a better place, if we made each other
-                        more compliments!
+                        a network for finding and sharing treasures found in
+                        Berlin!
                     </p>
-                    <p>Make people happy today, start making compliments!</p>
+                    <p>Start hunting today!</p>
                     <Route exact path="/" component={Register} />
                     <Route path="/login" component={Login} />
                     <Route path="/resetPassword" component={ResetPassword} />
                 </div>
                 <div id="welcome-logo-container">
                     <img
-                        src="./heart.png"
+                        src="./box.png"
                         style={{ height: 400, width: 400 }}
                     ></img>
                 </div>

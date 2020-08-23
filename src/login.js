@@ -36,34 +36,36 @@ export default class Login extends React.Component {
     }
     render() {
         return (
-            <div>
+            <>
                 {this.state.error && (
                     <p className="error">
                         Something went wrong! Please try again.
                     </p>
                 )}
-                <p>e-mail:</p>
-                <input
-                    type="text"
-                    name="email"
-                    id="email"
-                    onChange={(e) => this.handleChange(e)}
-                    placeholder="e-mail"
-                    autoComplete="off"
-                />
-                <p>Password:</p>
-                <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    onChange={(e) => this.handleChange(e)}
-                    placeholder="password"
-                    autoComplete="off"
-                />
-                <br></br>
-                <button id="submit" onClick={() => this.submit()}>
-                    Log in!
-                </button>
+                <div className="form">
+                    <p>e-mail:</p>
+                    <input
+                        type="text"
+                        name="email"
+                        id="email"
+                        onChange={(e) => this.handleChange(e)}
+                        placeholder="e-mail"
+                        autoComplete="off"
+                    />
+                    <p>Password:</p>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        onChange={(e) => this.handleChange(e)}
+                        placeholder="password"
+                        autoComplete="off"
+                    />
+                    <br></br>
+                    <button id="submit" onClick={() => this.submit()}>
+                        Log in!
+                    </button>
+                </div>
                 <p>
                     have you forgotten your password?{" "}
                     <Link to="/resetPassword">Reset your password here!</Link>
@@ -73,7 +75,7 @@ export default class Login extends React.Component {
                     You want to create a new account?{" "}
                     <Link to="/">Register</Link> here
                 </p>
-            </div>
+            </>
         );
     }
 }

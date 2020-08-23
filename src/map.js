@@ -65,12 +65,12 @@ export default function Map() {
                             onClick={() => {
                                 setSelected(marker);
                             }}
-                            /* icon={{
-                                url: `/bear.svg`,
+                            icon={{
+                                url: `/box.png`,
                                 origin: new window.google.maps.Point(0, 0),
                                 anchor: new window.google.maps.Point(15, 15),
                                 scaledSize: new window.google.maps.Size(30, 30),
-                            }} */
+                            }}
                         />
                     ))}
                 {selected ? (

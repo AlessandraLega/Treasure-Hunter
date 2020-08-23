@@ -46,19 +46,20 @@ export default function Comments({ id }) {
     };
 
     return (
-        <div id="wall">
+        <div id="comments">
             <textarea
+                id="textarea-comments"
                 onChange={(e) => setNewComment(e.target.value)}
                 rows="2"
                 cols="45"
             ></textarea>
-            <button onClick={() => saveComment()} id="button-wall">
+            <button onClick={() => saveComment()} id="button-comments">
                 Post
             </button>
             {comments &&
                 comments.map((comment, i) => {
                     return (
-                        <div className="post-container" key={i}>
+                        <div className="comment-container" key={i}>
                             <p className="sender">
                                 {comment.first} {comment.last}{" "}
                                 <span className="date">

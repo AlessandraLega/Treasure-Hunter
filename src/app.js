@@ -20,10 +20,12 @@ export default function App() {
                 <nav>
                     <Nav />
                 </nav>
-                <h1>Treasure Hunter</h1>
-                <Link to="/upload">
-                    <button>Upload treasure</button>
-                </Link>
+                <img id="logo" src="/box.png"></img>
+                <h1 id="title">Treasure Hunter</h1>
+
+                <button id="upload">
+                    <Link to="/upload">Upload treasure</Link>
+                </button>
             </header>
 
             <Route exact path="/" component={Home} />

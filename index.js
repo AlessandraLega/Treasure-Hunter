@@ -293,6 +293,8 @@ app.post("/remove-from-search", (req, res) => {
         });
 });
 
+app.get("/get-last-three/:search");
+
 app.get("/is-it-fav/:itemId", (req, res) => {
     const userId = req.session.id;
     const itemId = req.params.itemId;

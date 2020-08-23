@@ -38,57 +38,59 @@ export default class Register extends React.Component {
     }
     render() {
         return (
-            <div>
+            <>
                 {this.state.error && (
                     <p className="error">
                         Something went wrong! Please try again!
                     </p>
                 )}
-                <p>First name:</p>
-                <input
-                    type="text"
-                    name="first"
-                    id="first"
-                    onChange={(e) => this.handleChange(e)}
-                    placeholder="first name"
-                    autoComplete="off"
-                />
-                <p>Last name:</p>
-                <input
-                    type="text"
-                    name="last"
-                    id="last"
-                    onChange={(e) => this.handleChange(e)}
-                    placeholder="last name"
-                    autoComplete="off"
-                />
-                <p>e-mail:</p>
-                <input
-                    type="text"
-                    name="email"
-                    id="email"
-                    onChange={(e) => this.handleChange(e)}
-                    placeholder="e-mail"
-                    autoComplete="off"
-                />
-                <p>Password:</p>
-                <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    onChange={(e) => this.handleChange(e)}
-                    placeholder="password"
-                    autoComplete="off"
-                />
-                <br></br>
-                <button id="submit" onClick={() => this.submit()}>
-                    Sign up!
-                </button>
+                <div className="form">
+                    <p>First name:</p>
+                    <input
+                        type="text"
+                        name="first"
+                        id="first"
+                        onChange={(e) => this.handleChange(e)}
+                        placeholder="first name"
+                        autoComplete="off"
+                    />
+                    <p>Last name:</p>
+                    <input
+                        type="text"
+                        name="last"
+                        id="last"
+                        onChange={(e) => this.handleChange(e)}
+                        placeholder="last name"
+                        autoComplete="off"
+                    />
+                    <p>e-mail:</p>
+                    <input
+                        type="text"
+                        name="email"
+                        id="email"
+                        onChange={(e) => this.handleChange(e)}
+                        placeholder="e-mail"
+                        autoComplete="off"
+                    />
+                    <p>Password:</p>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        onChange={(e) => this.handleChange(e)}
+                        placeholder="password"
+                        autoComplete="off"
+                    />
+                    <br></br>
+                    <button id="submit" onClick={() => this.submit()}>
+                        Sign up!
+                    </button>
+                </div>
                 <p>
                     Have you already registered? Then{" "}
                     <Link to="/login">log in</Link> here!
                 </p>
-            </div>
+            </>
         );
     }
 }

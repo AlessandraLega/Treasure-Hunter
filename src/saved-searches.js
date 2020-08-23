@@ -19,6 +19,7 @@ export default function SavedSearches() {
         axios.get("/saved-searches").then((response) => {
             if (response.data.length) {
                 setResults(response.data);
+                axios.get("/get-last-three/:" + response.data[0].search);
             } else {
                 setResults([]);
             }
@@ -38,11 +39,15 @@ export default function SavedSearches() {
         });
     };
     return (
-        <div>
+        <div id="container-saved-searches">
             {!!results.length &&
                 results.map((search, i) => {
                     return (
-                        <div key={i} id={`div-${search.search}`}>
+                        <div
+                            key={i}
+                            id={`div-${search.search}`}
+                            className="single-search"
+                        >
                             <Link to={`/search/${search.search}`}>
                                 <p>{search.search}</p>
                             </Link>

@@ -13,7 +13,7 @@ export default [
         elementType: "geometry.stroke",
         stylers: [
             {
-                color: "#f58549",
+                color: "#9c9c9c",
             },
         ],
     },
@@ -27,11 +27,21 @@ export default [
         ],
     },
     {
+        featureType: "all",
+        elementType: "labels.text.fill",
+        stylers: [
+            {
+                color: "#772f1a",
+                visibility: "on",
+            },
+        ],
+    },
+    {
         featureType: "landscape",
         elementType: "all",
         stylers: [
             {
-                color: "#f2a65a",
+                color: "#f2f2f2",
             },
         ],
     },
@@ -76,10 +86,19 @@ export default [
     },
     {
         featureType: "road",
-        elementType: "geometry.fill",
+        elementType: "geometry.stroke",
         stylers: [
             {
                 color: "#eec170",
+            },
+        ],
+    },
+    {
+        featureType: "road",
+        elementType: "geometry.fill",
+        stylers: [
+            {
+                color: "#fcf4c0",
             },
         ],
     },
@@ -97,7 +116,7 @@ export default [
         elementType: "labels.text.stroke",
         stylers: [
             {
-                color: "#772f1a",
+                color: "#ffffff",
             },
         ],
     },
@@ -168,3 +187,12 @@ export default [
         ],
     },
 ];
+
+/* colors
+585123 - dark green
+fcf4c0 - background
+eec170 - light brown
+f2a65a
+f58549 - arancio
+772f1a - dark brown
+*/

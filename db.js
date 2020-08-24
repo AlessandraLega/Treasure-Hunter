@@ -62,8 +62,8 @@ module.exports.addItem = function (url, description, address, id, lat, lng) {
 
 module.exports.getLastItems = function () {
     let q = `SELECT * FROM items
-            ORDER BY created_at DESC
-            LIMIT 10`;
+            WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '24 hours'
+            ORDER BY created_at DESC`;
     return db.query(q);
 };
 
@@ -75,7 +75,8 @@ module.exports.getSearch = function (search) {
             OR description
             ILIKE $2
             OR description
-            ILIKE $3`,
+            ILIKE $3
+            ORDER BY created_at DESC`,
         [search + "%", "%" + search, "%" + search + "%"]
     );
 };
@@ -88,6 +89,19 @@ module.exports.addSearch = function (search, id) {
     );
 };
 
+module.exports.getLastThree = function (search) {
+    return db.query(
+        `SELECT picture_url, id FROM items 
+        WHERE description ILIKE $1 
+        OR description ILIKE $2 
+        OR description ILIKE $3
+        OR description ILIKE $4
+        ORDER BY created_at DESC
+        LIMIT 3`,
+        [search + "%", "%" + search, "%" + search + "%", search]
+    );
+};
+
 module.exports.getSaved = function (id) {
     return db.query(
         `SELECT DISTINCT search FROM saved_searches
@@ -97,7 +111,7 @@ module.exports.getSaved = function (id) {
 };
 
 module.exports.removeFromSearch = function (item) {
-    return db.query(`DELETE FROM saved_searches WHERE search=$1`, [item]);
+    return db.query(`DELETE FROM saved_searches WHERE search ILIKE $1`, [item]);
 };
 
 module.exports.getItem = function (id) {
@@ -105,16 +119,18 @@ module.exports.getItem = function (id) {
 };
 
 module.exports.getAll = function () {
-    return db.query(`SELECT * FROM items`);
+    return db.query(
+        `SELECT * FROM items WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '24 hours'`
+    );
 };
 
 module.exports.checkSearches = function (description) {
     return db.query(
         `SELECT user_id, search FROM saved_searches
-        WHERE search = $1 
-        OR search = $2 
-        OR search = $3
-        OR search = $4`,
+        WHERE search ILIKE $1 
+        OR search ILIKE $2 
+        OR search ILIKE $3
+        OR search ILIKE $4`,
         [
             description + "%",
             "%" + description,

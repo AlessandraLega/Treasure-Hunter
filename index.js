@@ -274,6 +274,18 @@ app.get("/saved-searches", (req, res) => {
         });
 });
 
+app.get("/get-last-three/:search", (req, res) => {
+    let search = req.params.search;
+    db.getLastThree(search)
+        .then(({ rows }) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("error in getLastThree:", err);
+            res.json({ success: false });
+        });
+});
+
 app.post("/remove-from-search", (req, res) => {
     console.log("hit server route");
     db.removeFromSearch(req.body.item)
@@ -292,8 +304,6 @@ app.post("/remove-from-search", (req, res) => {
             res.json({ success: false });
         });
 });
-
-app.get("/get-last-three/:search");
 
 app.get("/is-it-fav/:itemId", (req, res) => {
     const userId = req.session.id;

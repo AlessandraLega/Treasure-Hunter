@@ -15,7 +15,7 @@ import {
     ComboboxOption,
 } from "@reach/combobox";
 
-export default function Upload() {
+export default function Upload(props) {
     const [input, setInput] = useState({});
     const save = (e) => {
         if (e.target.files) {
@@ -93,7 +93,7 @@ export default function Upload() {
                     newItemId: data.id,
                     description: data.description,
                 });
-                location.href = "/";
+                props.history.push("/");
             })
             .catch(function (err) {
                 console.log("error in post /upload: ", err);

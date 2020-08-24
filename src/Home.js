@@ -39,14 +39,17 @@ export default function Home(props) {
     };
     return (
         <div id="main-container">
-            <p>What treasure are you looking for?</p>
+            <div id="first-line">
+                <p>What treasure are you looking for?</p>
+                {!mapOpen && <button onClick={toggleMap}>Map View</button>}
+                {!!mapOpen && <button onClick={toggleMap}>List View</button>}
+            </div>
             <input
                 type="text"
                 name="search"
                 autoComplete="off"
                 onChange={handleChange}
             />
-            {/*             <Map /> */}
             {!searchSaved && searching && (
                 <button onClick={saveSearch}>Save this search</button>
             )}
@@ -56,8 +59,6 @@ export default function Home(props) {
                 </p>
             )}
             {searchSaved && <p>Search succesfully saved</p>}
-            {!mapOpen && <button onClick={toggleMap}>Map View</button>}
-            {!!mapOpen && <button onClick={toggleMap}>List View</button>}
             {!mapOpen && <Results search={search} />}
             {!!mapOpen && <Map />}
         </div>

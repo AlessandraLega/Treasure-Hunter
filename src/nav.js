@@ -9,6 +9,7 @@ export default function Nav() {
 
     useEffect(() => {
         console.log("useEffect running");
+        console.log("socket:", socket);
 
         socket.emit("requestSearch");
         socket.emit("requestFav");
@@ -37,7 +38,7 @@ export default function Nav() {
             socket.off("notificationFav");
         };
 
-        return cleanup();
+        return cleanup;
     }, []);
 
     const resetNotificationsSearch = () => {
@@ -56,17 +57,17 @@ export default function Nav() {
             <span> | </span>
             <Link to={"/saved-treasures"} onClick={resetNotificationsFav}>
                 <span className="nav-link">saved treasures</span>
-                {!!notificationFav && <span>({notificationFav})</span>}
+                {!!+notificationFav && <span>({notificationFav})</span>}
             </Link>
             <span> | </span>
             <Link to={"/my-searches"} onClick={resetNotificationsSearch}>
                 <span className="nav-link">my searches</span>
-                {!!notificationSearch && <span>({notificationSearch})</span>}
+                {!!+notificationSearch && <span>({notificationSearch})</span>}
             </Link>
-            <span> | </span>
+            {/* <span> | </span>
             <Link to={"/chat"}>
                 <span className="nav-link">Chat</span>
-            </Link>
+            </Link> */}
             <span> | </span>
             <a id="logout" href="/logout">
                 Log out

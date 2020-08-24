@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 
 //const libraries = "places";
 const mapContainerStyle = {
-    width: "500px",
+    width: "550px",
     height: "500px",
 };
 const center = {
@@ -47,6 +47,7 @@ export default function Map() {
     return (
         <div>
             <GoogleMap
+                id="map"
                 mapContainerStyle={mapContainerStyle}
                 zoom={12}
                 center={center}

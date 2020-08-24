@@ -155,13 +155,15 @@ export default function Results({ search }) {
                                         </svg>
                                     </div>
                                     <p className="address">{item.address}</p>
-                                    <p className="time">
-                                        {convertTime(item.created_at)}
-                                    </p>
-                                    <div
-                                        className="circle"
-                                        style={setColor(item.created_at)}
-                                    ></div>
+                                    <div id="circle-time">
+                                        <div
+                                            className="circle"
+                                            style={setColor(item.created_at)}
+                                        ></div>
+                                        <p className="time">
+                                            {convertTime(item.created_at)}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </Link>

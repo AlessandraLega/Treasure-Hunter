@@ -9,7 +9,7 @@ export default function Welcome() {
         <HashRouter>
             <div id="welcome">
                 <div id="welcome-text">
-                    <p id="first-line">welcome to</p>
+                    <p id="first-line-welcome">welcome to</p>
                     <h1>Treasure Hunter</h1>
                     <p>
                         a network for finding and sharing treasures found in

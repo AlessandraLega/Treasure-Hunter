@@ -622,16 +622,29 @@ io.on("connection", (socket) => {
                             newItemId
                         )
                             .then(({ rows }) => {
-                                let userId = rows[0]["user_id"];
-                                const recipientSocketId = usersSockets[userId];
-                                console.log("usersSockets :", usersSockets);
-                                console.log(
-                                    "recipientSocketId :",
-                                    recipientSocketId
-                                );
-                                return io.sockets.sockets[
-                                    recipientSocketId
-                                ].emit("notificationSearch", rows[0].search);
+                                console.log("rows :", rows);
+                                rows.forEach((user, i) => {
+                                    let userId = user["user_id"];
+                                    console.log("userId :", userId);
+                                    if (usersSockets[userId]) {
+                                        const recipientSocketId =
+                                            usersSockets[userId];
+                                        console.log(
+                                            "usersSockets :",
+                                            usersSockets
+                                        );
+                                        console.log(
+                                            "recipientSocketId :",
+                                            recipientSocketId
+                                        );
+                                        return io.sockets.sockets[
+                                            recipientSocketId
+                                        ].emit(
+                                            "notificationSearch",
+                                            rows[i].search
+                                        );
+                                    }
+                                });
                             })
                             .catch((err) => {
                                 console.log(

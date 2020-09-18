@@ -382,6 +382,8 @@ textarea {
     width: 150px;
     height: 150px;
     padding: 10px;
+    object-fit: cover;
+    object-position: center;
 }
 /* colors
 585123 - dark green

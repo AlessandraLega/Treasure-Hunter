@@ -62,8 +62,8 @@ module.exports.addItem = function (url, description, address, id, lat, lng) {
 
 module.exports.getLastItems = function () {
     let q = `SELECT * FROM items
-            WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '24 hours'
-            ORDER BY created_at DESC`;
+    ORDER BY created_at DESC`;
+    //WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '24 hours'
     return db.query(q);
 };
 

@@ -33,12 +33,12 @@ export default function Nav() {
             setNotificationSearch(notificationFav + 1);
         });
 
-        const cleanup = () => {
+        /* const cleanup = () => {
             socket.off("notificationSearch");
             socket.off("notificationFav");
         };
 
-        return cleanup;
+        return cleanup; */
     }, []);
 
     const resetNotificationsSearch = () => {

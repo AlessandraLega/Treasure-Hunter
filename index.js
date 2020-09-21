@@ -287,7 +287,6 @@ app.get("/get-last-three/:search", (req, res) => {
 });
 
 app.post("/remove-from-search", (req, res) => {
-    console.log("hit server route");
     db.removeFromSearch(req.body.item)
         .then(() => {
             db.getSaved(req.session.id)

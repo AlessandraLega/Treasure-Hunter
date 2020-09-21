@@ -95,10 +95,14 @@ module.exports.addSearch = function (search, id) {
 module.exports.getLastThree = function (search) {
     return db.query(
         `SELECT picture_url, id FROM items 
-        WHERE description ILIKE $1 
-        OR description ILIKE $2 
-        OR description ILIKE $3
-        OR description ILIKE $4
+        WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '24 hours'
+        AND description ILIKE $1 
+        OR CURRENT_TIMESTAMP - created_at < INTERVAL '24 hours'
+        AND description ILIKE $2 
+        OR CURRENT_TIMESTAMP - created_at < INTERVAL '24 hours'
+        AND description ILIKE $3
+        OR CURRENT_TIMESTAMP - created_at < INTERVAL '24 hours'
+        AND description ILIKE $4
         ORDER BY created_at DESC
         LIMIT 3`,
         [search + "%", "%" + search, "%" + search + "%", search]

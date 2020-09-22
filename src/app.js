@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Home from "./home";
 import Upload from "./upload";
 import Item from "./item";
@@ -7,6 +7,7 @@ import Nav from "./nav";
 import SavedSearches from "./saved-searches";
 import Map from "./map";
 import * as io from "socket.io-client";
+import secrets from "../secrets.json";
 
 export let socket;
 
@@ -14,6 +15,12 @@ if (!socket) {
     socket = io.connect();
 }
 export default function App() {
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${secrets.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=places`;
+        document.body.appendChild(script);
+    }, []);
+
     return (
         <BrowserRouter>
             <header>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "./axios";
+
 import {
     GoogleMap,
     useLoadScript,
@@ -29,23 +30,26 @@ const options = {
 //const geocoder = new window.google.maps.Geocoder();
 
 export default function Map() {
-    /* const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: secrets.REACT_APP_GOOGLE_MAPS_API_KEY,
-    }); */
+    // const { isLoaded, loadError } = useLoadScript({
+    //     googleMapsApiKey: secrets.REACT_APP_GOOGLE_MAPS_API_KEY,
+    // });
     const [markers, setMarkers] = useState([]);
     const [selected, setSelected] = useState(null);
 
     useEffect(() => {
         axios.get("/get-all").then(({ data }) => {
-            console.log("data fr :", data);
             setMarkers(data);
         });
+
+        /*         return () => {
+            document.body.removeChild(script);
+        }; */
     }, []);
 
     console.log("selected :", selected);
 
     return (
-        <div>
+        <>
             <GoogleMap
                 id="map"
                 mapContainerStyle={mapContainerStyle}
@@ -97,6 +101,7 @@ export default function Map() {
                     </InfoWindow>
                 ) : null}
             </GoogleMap>
-        </div>
+            {/* <script src={scriptSrc}></script> */}
+        </>
     );
 }
